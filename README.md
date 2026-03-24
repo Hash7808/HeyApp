@@ -1,2 +1,0 @@
-# HeyApp
-chatting App
