@@ -767,11 +767,11 @@ textarea {
 }
 
 .attach-btn, .emoji-btn {
-    width: 28px;
-    padding: 4px;
+    width: 22px;
+    padding: 2px;
     margin: 0;
     background: transparent;
-    font-size: 17px;
+    font-size: 15px;
     border: none;
     cursor: pointer;
     border-radius: 50%;
@@ -1720,15 +1720,21 @@ body.dark .pinned-banner {
     background: white !important;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
     border-top: 1px solid rgba(102,126,234,0.1) !important;
-    padding: 12px 15px !important;
+    padding: 8px 10px !important;
+    gap: 4px !important;
+    align-items: center !important;
 }
 .input-container input {
     background: #f8f9ff !important;
     border: 2px solid transparent !important;
     color: #333 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     border-radius: 25px !important;
     transition: all 0.3s !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 10px 14px !important;
+    margin: 0 !important;
 }
 .input-container input:focus {
     border-color: #667eea !important;
@@ -1740,6 +1746,11 @@ body.dark .pinned-banner {
     border-radius: 25px !important;
     box-shadow: 0 4px 15px rgba(102,126,234,0.4) !important;
     transition: all 0.2s !important;
+    width: auto !important;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
 }
 .input-container button:hover { transform: scale(1.05) !important; }
 
