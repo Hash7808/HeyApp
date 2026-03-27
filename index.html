@@ -767,13 +767,15 @@ textarea {
 }
 
 .attach-btn, .emoji-btn {
-    width: 40px;
-    padding: 10px;
+    width: 28px;
+    padding: 4px;
     margin: 0;
     background: transparent;
-    font-size: 24px;
+    font-size: 17px;
     border: none;
     cursor: pointer;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .attach-btn:hover, .emoji-btn:hover {
@@ -1723,6 +1725,8 @@ body.dark .pinned-banner {
 .input-container input {
     background: #f8f9ff !important;
     border: 2px solid transparent !important;
+    color: #333 !important;
+    font-size: 15px !important;
     border-radius: 25px !important;
     transition: all 0.3s !important;
 }
@@ -1800,7 +1804,7 @@ body.dark .pinned-banner {
 /* Premium dark mode */
 body.dark .chat-item:hover { background: rgba(102,126,234,0.15) !important; }
 body.dark .other-message { background: #1e2a3a !important; color: #fff !important; }
-body.dark .input-container input { background: #1e2a3a !important; color: #fff !important; }
+body.dark .input-container input { background: #1e2a3a !important; color: #fff !important; border-color: #2d3f55 !important; }
 body.dark .settings-item:hover { background: rgba(102,126,234,0.15) !important; }
 body.dark .link-preview { background: #1e2a3a; }
 body.dark .link-preview-title { color: #fff; }
