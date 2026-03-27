@@ -1886,6 +1886,7 @@ body.dark .ai-bot-msg .ai-bubble { background:#1e2a3a; color:#fff; }
             <button class="icon-btn" onclick="showNewGroup()">👥</button>
             <button class="icon-btn" onclick="showAIChat()" title="AI Assistant">🤖</button>
             <button class="icon-btn" onclick="showSettings()">⚙️</button>
+            <button class="icon-btn" onclick="confirmLogout()" title="Logout" style="background:rgba(255,59,48,0.3);">🚪</button>
         </div>
     </div>
     <div class="tab-navigation">
@@ -2606,6 +2607,12 @@ if (darkMode) {
 // Auth State
 auth.onAuthStateChanged( async (user) => {
     console.log('Auth state:', user ? user.email : 'null');
+    // If app lock is active, don't auto-navigate
+    const lockEnabled = localStorage.getItem('appLockEnabled') === 'true';
+    const pin = localStorage.getItem('appPin');
+    const lockScreen = document.getElementById('appLockScreen');
+    if (lockEnabled && pin && !lockScreen.classList.contains('hidden')) return;
+
     if (user) {
         try {
             const snap = await dbRef(`users/${user.uid}`).once("value");
@@ -2675,6 +2682,13 @@ window.logout = async () => {
     await auth.signOut();
 };
 
+window.confirmLogout = async () => {
+    if (confirm('Logout karna chahte ho?')) {
+        updateOnlineStatus(false);
+        await auth.signOut();
+    }
+};
+
 // Online Status
 function updateOnlineStatus(isOnline) {
     if (!currentUser) return;
@@ -2693,6 +2707,10 @@ function showMainScreen() {
 
 window.backToMain = () => {
     if (messagesListener) { try{messagesListener.off();}catch(e){} messagesListener = null; }
+    if (currentChatId && currentUser) {
+        dbRef(`typing/${currentChatId}/${currentUser.uid}`).remove();
+        if (currentOtherUser) dbRef(`typing/${currentChatId}/${currentOtherUser.uid}`).off();
+    }
     if (window.statusInterval) { clearInterval(window.statusInterval); window.statusInterval = null; }
     showMainScreen();
 };
@@ -2819,6 +2837,7 @@ window.openChat = (otherUser) => {
     if (window.statusInterval) clearInterval(window.statusInterval);
     window.statusInterval = setInterval(updateChatStatus, 5000);
     listenMessages();
+    listenTyping();
 };
 
 function updateChatStatus() {
@@ -3113,7 +3132,39 @@ document.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && document.getElementById('messageInput') === document.activeElement) sendMessage();
 });
 
-window.handleTyping = () => {};
+let typingTimeout = null;
+window.handleTyping = () => {
+    if (!currentChatId || !currentUser) return;
+    // Set typing true
+    dbRef(`typing/${currentChatId}/${currentUser.uid}`).set(true);
+    // Clear after 2 seconds of no typing
+    if (typingTimeout) clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+        dbRef(`typing/${currentChatId}/${currentUser.uid}`).remove();
+    }, 2000);
+};
+
+// Listen for other user typing
+function listenTyping() {
+    if (!currentChatId || !currentOtherUser) return;
+    dbRef(`typing/${currentChatId}/${currentOtherUser.uid}`).on('value', snap => {
+        const indicator = document.getElementById('typingIndicator');
+        if (!indicator) return;
+        if (snap.val()) {
+            indicator.classList.remove('hidden');
+            indicator.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 15px;">
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span style="font-size:13px;color:#667eea;">${currentOtherUser.name} is typing...</span>
+                </div>`;
+        } else {
+            indicator.classList.add('hidden');
+            indicator.innerHTML = '';
+        }
+    });
+}
 
 // ==================== WEBRTC REAL CALLS ====================
 let localStream = null;
@@ -3719,25 +3770,54 @@ window.toggleAppLock = () => {
     localStorage.setItem('appLockEnabled', next);
     document.getElementById('appLockStatus').textContent = next ? 'On' : 'Off';
     document.getElementById('pinSetupDiv').classList.toggle('hidden', !next);
+    if (!next) localStorage.removeItem('appPin');
 };
 
 window.savePin = () => {
     const pin = document.getElementById('newPinInput').value;
-    if (pin.length !== 4) return alert('PIN must be 4 digits!');
+    if (pin.length !== 4 || isNaN(pin)) return alert('4 digit number PIN daalo!');
     localStorage.setItem('appPin', pin);
-    alert('PIN saved!');
+    alert('PIN saved! App lock active ho gaya.');
 };
 
 window.unlockApp = () => {
     const pin = document.getElementById('lockPinInput').value;
     const savedPin = localStorage.getItem('appPin');
+    if (!savedPin) { showScreen('loginScreen'); return; }
     if (pin === savedPin) {
+        document.getElementById('lockPinInput').value = '';
         showScreen('loginScreen');
-        auth.onAuthStateChanged( (user) => { if (user) showMainScreen(); });
+        // Check if already logged in
+        const user = auth.currentUser;
+        if (user) showMainScreen();
     } else {
-        alert('Wrong PIN!');
+        document.getElementById('lockPinInput').value = '';
+        document.getElementById('lockPinInput').placeholder = 'Wrong PIN! Try again';
+        document.getElementById('lockPinInput').style.borderColor = '#ff4444';
+        setTimeout(() => {
+            document.getElementById('lockPinInput').placeholder = 'Enter PIN';
+            document.getElementById('lockPinInput').style.borderColor = '';
+        }, 1500);
     }
 };
+
+// Check app lock on page load
+function checkAppLock() {
+    const lockEnabled = localStorage.getItem('appLockEnabled') === 'true';
+    const pin = localStorage.getItem('appPin');
+    if (lockEnabled && pin) {
+        // Show lock screen immediately
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById('appLockScreen').classList.remove('hidden');
+        return true;
+    }
+    return false;
+}
+
+// Run on load
+if (!checkAppLock()) {
+    // Normal auth flow will handle it
+}
 
 // Delete Account
 window.deleteAccount = async () => {
