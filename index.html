@@ -1,11 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HeyApp">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.json">
     <title>HeyApp</title>
-    <style>
-* {
+    <style>* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -15,17 +20,61 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #app {
+    width: 100%;
     height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Desktop - show as phone card */
+@media (min-width: 600px) {
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    #app {
+        width: 420px;
+        height: 90vh;
+        max-height: 860px;
+        border-radius: 40px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 8px rgba(255,255,255,0.1);
+        overflow: hidden;
+        position: relative;
+    }
+    /* Notch effect on desktop */
+    #app::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 50%; transform: translateX(-50%);
+        width: 120px; height: 28px;
+        background: #1a1a2e;
+        border-radius: 0 0 20px 20px;
+        z-index: 9999;
+    }
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+    #app {
+        width: 440px;
+        height: 88vh;
+    }
 }
 
 .screen {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     background: white;
+    overflow: hidden;
 }
 
 .hidden {
@@ -891,10 +940,8 @@ textarea {
 .close-modal-btn:hover {
     background: rgba(255,255,255,0.3);
 }
-
 </style>
-    <style>
-/* Dark Mode */
+    <style>/* Dark Mode */
 body.dark {
     background: #1a1a2e;
 }
@@ -1113,7 +1160,7 @@ body.dark .dropdown-item:hover {
 
 /* Forward Modal */
 .modal-overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -1579,15 +1626,219 @@ body.dark .pinned-banner {
     border-color: #4a3800;
 }
 
+/* ===== PREMIUM UI STYLES ===== */
+
+/* Splash Screen */
+#splashScreen {
+    position: absolute; top:0; left:0; right:0; bottom:0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9999; transition: opacity 0.5s ease;
+}
+#splashScreen h1 { color: white; font-size: 48px; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px; }
+#splashScreen p { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 40px; }
+.splash-loader { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Premium Login */
+.container {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(102,126,234,0.3);
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    margin: auto;
+}
+.login-logo { font-size: 60px; text-align: center; margin-bottom: 10px; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.login-subtitle { text-align: center; color: #999; font-size: 14px; margin-bottom: 25px; }
+
+/* Premium Header */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    box-shadow: 0 4px 20px rgba(102,126,234,0.4) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Online dot */
+.online-dot {
+    width: 12px; height: 12px; background: #25D366;
+    border-radius: 50%; border: 2px solid white;
+    position: absolute; bottom: 0; right: 0;
+    animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,0.4)} 50%{box-shadow:0 0 0 6px rgba(37,211,102,0)} }
+
+/* Premium Chat Item */
+.chat-item {
+    border-radius: 12px !important;
+    margin: 4px 10px !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+    position: relative;
+}
+.chat-item:hover { background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08)) !important; transform: translateX(4px); }
+
+/* Premium Avatar */
+.chat-avatar {
+    border-radius: 50% !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15) !important;
+    position: relative;
+}
+
+/* Gradient Avatars */
+.avatar-gradient-1 { background: linear-gradient(135deg, #f093fb, #f5576c) !important; }
+.avatar-gradient-2 { background: linear-gradient(135deg, #4facfe, #00f2fe) !important; }
+.avatar-gradient-3 { background: linear-gradient(135deg, #43e97b, #38f9d7) !important; }
+.avatar-gradient-4 { background: linear-gradient(135deg, #fa709a, #fee140) !important; }
+.avatar-gradient-5 { background: linear-gradient(135deg, #a18cd1, #fbc2eb) !important; }
+.avatar-gradient-6 { background: linear-gradient(135deg, #ffecd2, #fcb69f) !important; }
+
+/* Premium Messages */
+.my-message {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    border-radius: 18px 18px 4px 18px !important;
+    box-shadow: 0 4px 15px rgba(102,126,234,0.3) !important;
+}
+.other-message {
+    background: white !important;
+    border-radius: 18px 18px 18px 4px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
+}
+.my-message .message-time { color: rgba(255,255,255,0.8) !important; }
+
+/* Message slide animation */
+.message { animation: msgSlide 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
+@keyframes msgSlide { from { opacity:0; transform: translateY(20px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
+
+/* Premium Input */
+.input-container {
+    background: white !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
+    border-top: 1px solid rgba(102,126,234,0.1) !important;
+    padding: 12px 15px !important;
+}
+.input-container input {
+    background: #f8f9ff !important;
+    border: 2px solid transparent !important;
+    border-radius: 25px !important;
+    transition: all 0.3s !important;
+}
+.input-container input:focus {
+    border-color: #667eea !important;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.1) !important;
+}
+.input-container button {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border-radius: 25px !important;
+    box-shadow: 0 4px 15px rgba(102,126,234,0.4) !important;
+    transition: all 0.2s !important;
+}
+.input-container button:hover { transform: scale(1.05) !important; }
+
+/* Premium Tab */
+.tab-navigation { box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important; }
+.tab-item.active {
+    color: #667eea !important;
+    border-bottom: 3px solid #667eea !important;
+    font-weight: 700 !important;
+}
+
+/* Premium Settings */
+.settings-item {
+    border-radius: 12px !important;
+    margin: 4px 10px !important;
+    border: none !important;
+    transition: all 0.2s !important;
+}
+.settings-item:hover { background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08)) !important; }
+
+/* Link Preview */
+.link-preview {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+.link-preview-title { font-weight: 600; font-size: 13px; color: #333; }
+.link-preview-url { font-size: 11px; color: #667eea; margin-top: 3px; }
+
+/* Typing indicator premium */
+.typing-dots { display: flex; gap: 4px; padding: 8px 12px; }
+.typing-dots span {
+    width: 8px; height: 8px; background: #667eea;
+    border-radius: 50%; animation: typing 1.4s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+
+/* Notification badge */
+.notif-badge {
+    position: absolute; top: -4px; right: -4px;
+    background: #ff4444; color: white;
+    border-radius: 50%; width: 18px; height: 18px;
+    font-size: 11px; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; border: 2px solid white;
+}
+
+/* Premium Screens transition */
+.screen { animation: screenFade 0.25s ease; }
+@keyframes screenFade { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Seen time */
+.seen-time { font-size: 10px; color: #25D366; margin-left: 4px; }
+
+/* Report button */
+.report-btn { background: #ff4444 !important; }
+
+/* Premium dark mode */
+body.dark .chat-item:hover { background: rgba(102,126,234,0.15) !important; }
+body.dark .other-message { background: #1e2a3a !important; color: #fff !important; }
+body.dark .input-container input { background: #1e2a3a !important; color: #fff !important; }
+body.dark .settings-item:hover { background: rgba(102,126,234,0.15) !important; }
+body.dark .link-preview { background: #1e2a3a; }
+body.dark .link-preview-title { color: #fff; }
+
+/* AI Chat Styles */
+.ai-msg { display:flex; align-items:flex-end; gap:8px; margin:4px 0; animation: msgSlide 0.3s ease; }
+.ai-bot-msg { flex-direction:row; }
+.ai-user-msg { flex-direction:row-reverse; }
+.ai-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.ai-bubble { max-width:75%; padding:12px 16px; border-radius:18px; font-size:14px; line-height:1.5; white-space:pre-wrap; }
+.ai-bot-msg .ai-bubble { background:white; color:#333; border-radius:18px 18px 18px 4px; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+.ai-user-msg .ai-bubble { background:linear-gradient(135deg,#667eea,#764ba2); color:white; border-radius:18px 18px 4px 18px; }
+.ai-typing { display:flex; gap:4px; padding:12px 16px; background:white; border-radius:18px; box-shadow:0 2px 10px rgba(0,0,0,0.08); width:fit-content; }
+.ai-typing span { width:8px; height:8px; background:#667eea; border-radius:50%; animation:typing 1.4s infinite; }
+.ai-typing span:nth-child(2){animation-delay:0.2s}
+.ai-typing span:nth-child(3){animation-delay:0.4s}
+body.dark #aiMessages { background:#0f3460; }
+body.dark .ai-bot-msg .ai-bubble { background:#1e2a3a; color:#fff; }
 </style>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
-<div id="app">
+
+<!-- Splash Screen -->
+<div id="splashScreen">
+    <div class="login-logo">💬</div>
+    <h1>HeyApp</h1>
+    <p>Connect with anyone, anywhere</p>
+    <div class="splash-loader"></div>
+</div>
 
 <!-- App Lock Screen -->
 <div id="appLockScreen" class="screen hidden">
     <div class="container">
-        <h1>ï¿½ HeyApp</h1>
+        <h1>� HeyApp</h1>
         <p style="text-align:center;color:#666;margin-bottom:20px;">Enter PIN to unlock</p>
         <input type="password" id="lockPinInput" placeholder="Enter PIN" maxlength="4" />
         <button onclick="unlockApp()">Unlock</button>
@@ -1596,24 +1847,33 @@ body.dark .pinned-banner {
 
 <!-- Login Screen -->
 <div id="loginScreen" class="screen hidden">
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);">
     <div class="container">
-        <h1>ðŸ’¬ HeyApp</h1>
-        <input type="email" id="loginEmail" placeholder="Email" />
-        <input type="password" id="loginPassword" placeholder="Password" />
-        <button onclick="login()">Login</button>
-        <p class="link" onclick="showRegister()">Don't have an account? Register</p>
+        <div class="login-logo">💬</div>
+        <h1 style="text-align:center;margin-bottom:5px;">HeyApp</h1>
+        <p class="login-subtitle">Welcome back! Sign in to continue</p>
+        <input type="email" id="loginEmail" placeholder="📧 Email address" />
+        <input type="password" id="loginPassword" placeholder="🔒 Password" />
+        <button onclick="login()">Sign In →</button>
+        <p class="link" onclick="showRegister()" style="margin-top:15px;">Don't have an account? <b>Register</b></p>
+    </div>
     </div>
 </div>
 
 <!-- Register Screen -->
 <div id="registerScreen" class="screen hidden">
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);">
     <div class="container">
-        <h1>Create Account</h1>
-        <input type="text" id="registerName" placeholder="Full Name" />
-        <input type="email" id="registerEmail" placeholder="Email" />
-        <input type="password" id="registerPassword" placeholder="Password (min 6 chars)" />
-        <button onclick="register()">Register</button>
-        <p class="link" onclick="showLogin()">Already have an account? Login</p>
+        <div class="login-logo">🎉</div>
+        <h1 style="text-align:center;margin-bottom:5px;">Create Account</h1>
+        <p class="login-subtitle">Join HeyApp today - it's free!</p>
+        <input type="text" id="registerName" placeholder="👤 Full Name" />
+        <input type="email" id="registerEmail" placeholder="📧 Email address" />
+        <input type="tel" id="registerPhone" placeholder="📱 Phone Number (optional)" />
+        <input type="password" id="registerPassword" placeholder="🔒 Password (min 6 chars)" />
+        <button onclick="register()">Create Account →</button>
+        <p class="link" onclick="showLogin()" style="margin-top:15px;">Already have an account? <b>Sign In</b></p>
+    </div>
     </div>
 </div>
 
@@ -1622,9 +1882,10 @@ body.dark .pinned-banner {
     <div class="header">
         <h2>HeyApp</h2>
         <div class="header-right">
-            <button class="icon-btn" onclick="toggleDarkMode()" id="darkModeBtn">ðŸŒ™</button>
-            <button class="icon-btn" onclick="showNewGroup()">ðŸ‘¥</button>
-            <button class="icon-btn" onclick="showSettings()">âš™ï¸</button>
+            <button class="icon-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
+            <button class="icon-btn" onclick="showNewGroup()">👥</button>
+            <button class="icon-btn" onclick="showAIChat()" title="AI Assistant">🤖</button>
+            <button class="icon-btn" onclick="showSettings()">⚙️</button>
         </div>
     </div>
     <div class="tab-navigation">
@@ -1636,7 +1897,7 @@ body.dark .pinned-banner {
         <div class="my-status-card" onclick="showAddStatus()">
             <div class="status-avatar">
                 <img id="myStatusPhoto" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;" />
-                <span id="myStatusIcon">ðŸ‘¤</span>
+                <span id="myStatusIcon">👤</span>
                 <div class="add-status-btn">+</div>
             </div>
             <div class="status-info">
@@ -1652,8 +1913,9 @@ body.dark .pinned-banner {
     </div>
     <div id="chatsTab" class="tab-content">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="ðŸ” Search users..." oninput="searchUsers()" />
+            <input type="text" id="searchInput" placeholder="🔍 Search by email or phone..." oninput="searchUsers()" />
         </div>
+        <div id="recentChatsList"></div>
         <div id="chatList"></div>
     </div>
 </div>
@@ -1661,13 +1923,13 @@ body.dark .pinned-banner {
 <!-- Add Status -->
 <div id="addStatusScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToMain()">â†</button>
+        <button class="back-btn" onclick="backToMain()">←</button>
         <h2>Add Status</h2><div></div>
     </div>
     <div class="status-add-container">
         <textarea id="statusText" placeholder="Type a status..." maxlength="200"></textarea>
         <div class="status-add-options">
-            <button onclick="document.getElementById('statusPhotoInput').click()">ðŸ“· Photo</button>
+            <button onclick="document.getElementById('statusPhotoInput').click()">📷 Photo</button>
             <input type="file" id="statusPhotoInput" accept="image/*" style="display:none;" onchange="previewStatusPhoto()" />
         </div>
         <div id="statusPhotoPreview" class="status-photo-preview hidden"></div>
@@ -1679,7 +1941,7 @@ body.dark .pinned-banner {
 <div id="viewStatusScreen" class="screen hidden">
     <div class="status-viewer">
         <div class="status-header">
-            <button class="back-btn" onclick="backToMain()">â†</button>
+            <button class="back-btn" onclick="backToMain()">←</button>
             <div class="status-user-info">
                 <span id="statusUserName"></span>
                 <span id="statusTime"></span>
@@ -1695,79 +1957,79 @@ body.dark .pinned-banner {
 <!-- Settings -->
 <div id="settingsScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToMain()">â†</button>
+        <button class="back-btn" onclick="backToMain()">←</button>
         <h2>Settings</h2><div></div>
     </div>
     <div class="settings-container">
-        <div class="settings-item" onclick="showProfile()"><span>ðŸ‘¤ Profile</span><span>â†’</span></div>
-        <div class="settings-item" onclick="showPrivacySettings()"><span>ï¿½ Privacy</span><span>â†’</span></div>
-        <div class="settings-item" onclick="showChatSettings()"><span>ï¿½ Chat Settings</span><span>â†’</span></div>
-        <div class="settings-item" onclick="showNotificationSettings()"><span>ðŸ”” Notifications</span><span>â†’</span></div>
-        <div class="settings-item" onclick="showAppLockSettings()"><span>ðŸ”’ App Lock</span><span>â†’</span></div>
-        <div class="settings-item" onclick="show2FA()"><span>ðŸ” Two-Factor Auth</span><span>â†’</span></div>
-        <div class="settings-item" onclick="showLoginHistory()"><span>ðŸ“‹ Login History</span><span>â†’</span></div>
-        <div class="settings-item" onclick="toggleDarkMode()"><span>ðŸŒ™ Dark Mode</span><span id="darkModeStatus">Off</span></div>
-        <div class="settings-item" onclick="showLanguageSettings()"><span>ðŸŒ Language</span><span id="currentLang">English</span></div>
-        <div class="settings-item" onclick="showAutoReply()"><span>ðŸ¤– Auto Reply</span><span>â†’</span></div>
-        <div class="settings-item" onclick="showArchive()"><span>ðŸ“¦ Archived Chats</span><span>â†’</span></div>
-        <div class="settings-item" onclick="logout()"><span>ðŸšª Logout</span><span>â†’</span></div>
-        <div class="settings-item" onclick="deleteAccount()" style="color:red;"><span>âŒ Delete Account</span><span>â†’</span></div>
+        <div class="settings-item" onclick="showProfile()"><span>👤 Profile</span><span>→</span></div>
+        <div class="settings-item" onclick="showPrivacySettings()"><span>� Privacy</span><span>→</span></div>
+        <div class="settings-item" onclick="showChatSettings()"><span>� Chat Settings</span><span>→</span></div>
+        <div class="settings-item" onclick="showNotificationSettings()"><span>🔔 Notifications</span><span>→</span></div>
+        <div class="settings-item" onclick="showAppLockSettings()"><span>🔒 App Lock</span><span>→</span></div>
+        <div class="settings-item" onclick="show2FA()"><span>🔐 Two-Factor Auth</span><span>→</span></div>
+        <div class="settings-item" onclick="showLoginHistory()"><span>📋 Login History</span><span>→</span></div>
+        <div class="settings-item" onclick="toggleDarkMode()"><span>🌙 Dark Mode</span><span id="darkModeStatus">Off</span></div>
+        <div class="settings-item" onclick="showLanguageSettings()"><span>🌐 Language</span><span id="currentLang">English</span></div>
+        <div class="settings-item" onclick="showAutoReply()"><span>🤖 Auto Reply</span><span>→</span></div>
+        <div class="settings-item" onclick="showArchive()"><span>📦 Archived Chats</span><span>→</span></div>
+        <div class="settings-item" onclick="logout()"><span>🚪 Logout</span><span>→</span></div>
+        <div class="settings-item" onclick="deleteAccount()" style="color:red;"><span>❌ Delete Account</span><span>→</span></div>
     </div>
 </div>
 
 <!-- Privacy Settings -->
 <div id="privacyScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
+        <button class="back-btn" onclick="showSettings()">←</button>
         <h2>Privacy</h2><div></div>
     </div>
     <div class="settings-container">
-        <div class="settings-item" onclick="toggleLastSeen()"><span>ðŸ‘ï¸ Last Seen</span><span id="lastSeenStatus">Everyone</span></div>
-        <div class="settings-item" onclick="toggleReadReceipts()"><span>âœ“âœ“ Read Receipts</span><span id="readReceiptsStatus">On</span></div>
-        <div class="settings-item" onclick="showBlockedUsers()"><span>ðŸš« Blocked Users</span><span>â†’</span></div>
+        <div class="settings-item" onclick="toggleLastSeen()"><span>👁️ Last Seen</span><span id="lastSeenStatus">Everyone</span></div>
+        <div class="settings-item" onclick="toggleReadReceipts()"><span>✓✓ Read Receipts</span><span id="readReceiptsStatus">On</span></div>
+        <div class="settings-item" onclick="showBlockedUsers()"><span>🚫 Blocked Users</span><span>→</span></div>
     </div>
 </div>
 
 <!-- Chat Settings -->
 <div id="chatSettingsScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
+        <button class="back-btn" onclick="showSettings()">←</button>
         <h2>Chat Settings</h2><div></div>
     </div>
     <div class="settings-container">
         <div class="settings-item">
-            <span>ðŸ”¤ Font Size</span>
+            <span>🔤 Font Size</span>
             <select onchange="changeFontSize(this.value)" style="border:none;background:transparent;font-size:14px;">
                 <option value="14">Small</option>
                 <option value="16" selected>Medium</option>
                 <option value="18">Large</option>
             </select>
         </div>
-        <div class="settings-item" onclick="changeChatWallpaper()"><span>ðŸ–¼ï¸ Chat Wallpaper</span><span>â†’</span></div>
-        <div class="settings-item" onclick="changeThemeColor()"><span>ðŸŽ¨ Theme Color</span><span>â†’</span></div>
+        <div class="settings-item" onclick="changeChatWallpaper()"><span>🖼️ Chat Wallpaper</span><span>→</span></div>
+        <div class="settings-item" onclick="changeThemeColor()"><span>🎨 Theme Color</span><span>→</span></div>
     </div>
 </div>
 
 <!-- Notification Settings -->
 <div id="notificationScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
+        <button class="back-btn" onclick="showSettings()">←</button>
         <h2>Notifications</h2><div></div>
     </div>
     <div class="settings-container">
-        <div class="settings-item" onclick="toggleNotificationSound()"><span>ðŸ”” Sound</span><span id="soundStatus">On</span></div>
-        <div class="settings-item" onclick="toggleDND()"><span>ðŸŒ™ Do Not Disturb</span><span id="dndStatus">Off</span></div>
+        <div class="settings-item" onclick="toggleNotificationSound()"><span>🔔 Sound</span><span id="soundStatus">On</span></div>
+        <div class="settings-item" onclick="toggleDND()"><span>🌙 Do Not Disturb</span><span id="dndStatus">Off</span></div>
     </div>
 </div>
 
 <!-- App Lock Settings -->
 <div id="appLockSettingsScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
+        <button class="back-btn" onclick="showSettings()">←</button>
         <h2>App Lock</h2><div></div>
     </div>
     <div style="padding:20px;">
-        <div class="settings-item" onclick="toggleAppLock()"><span>ðŸ”’ App Lock</span><span id="appLockStatus">Off</span></div>
+        <div class="settings-item" onclick="toggleAppLock()"><span>🔒 App Lock</span><span id="appLockStatus">Off</span></div>
         <div id="pinSetupDiv" class="hidden" style="margin-top:20px;">
             <input type="password" id="newPinInput" placeholder="Set 4-digit PIN" maxlength="4" />
             <button onclick="savePin()" style="margin-top:10px;">Save PIN</button>
@@ -1778,25 +2040,27 @@ body.dark .pinned-banner {
 <!-- Profile -->
 <div id="profileScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
+        <button class="back-btn" onclick="showSettings()">←</button>
         <h2>Profile</h2><div></div>
     </div>
     <div class="profile-container">
         <div class="profile-avatar">
             <img id="profileImage" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;" />
-            <span id="profileIcon">ðŸ‘¤</span>
+            <span id="profileIcon">👤</span>
         </div>
         <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto()" />
-        <button onclick="document.getElementById('photoInput').click()" style="margin-top:20px;padding:10px 20px;width:auto;">ðŸ“· Change Photo</button>
-        <button onclick="showQRCode()" style="margin-top:10px;padding:10px 20px;width:auto;background:#764ba2;">ðŸ“± My QR Code</button>
+        <button onclick="document.getElementById('photoInput').click()" style="margin-top:20px;padding:10px 20px;width:auto;">📷 Change Photo</button>
+        <button onclick="showQRCode()" style="margin-top:10px;padding:10px 20px;width:auto;background:#764ba2;">📱 My QR Code</button>
         <h2 id="profileName" style="margin-top:20px;"></h2>
         <p id="profileEmail"></p>
         <div style="margin-top:20px;width:100%;max-width:400px;">
             <input type="text" id="usernameInput" placeholder="@username" style="margin-bottom:10px;" />
+            <input type="tel" id="phoneInput" placeholder="📱 Phone Number" style="margin-bottom:10px;" />
             <input type="text" id="bioInput" placeholder="Add bio..." style="margin-bottom:10px;" />
             <button onclick="saveProfile()" style="padding:10px 20px;width:auto;">Save</button>
         </div>
         <p id="profileUsername" style="margin-top:5px;color:#667eea;"></p>
+        <p id="profilePhone" style="margin-top:5px;color:#666;">📱 </p>
         <p id="profileBio" style="margin-top:5px;color:#666;font-style:italic;"></p>
     </div>
 </div>
@@ -1804,7 +2068,7 @@ body.dark .pinned-banner {
 <!-- Blocked Users -->
 <div id="blockedUsersScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showPrivacySettings()">â†</button>
+        <button class="back-btn" onclick="showPrivacySettings()">←</button>
         <h2>Blocked Users</h2><div></div>
     </div>
     <div id="blockedUsersList" style="flex:1;overflow-y:auto;"></div>
@@ -1813,19 +2077,24 @@ body.dark .pinned-banner {
 <!-- Create Group -->
 <div id="createGroupScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToMain()">â†</button>
+        <button class="back-btn" onclick="backToMain()">←</button>
         <h2>New Group</h2><div></div>
     </div>
     <div style="padding:20px;">
         <input type="file" id="groupPhotoInput" accept="image/*" style="display:none;" onchange="previewGroupPhoto()" />
         <div style="text-align:center;margin-bottom:20px;">
-            <div id="groupPhotoPreview" onclick="document.getElementById('groupPhotoInput').click()" style="width:80px;height:80px;border-radius:50%;background:#667eea;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto;cursor:pointer;">ðŸ‘¥</div>
+            <div id="groupPhotoPreview" onclick="document.getElementById('groupPhotoInput').click()" style="width:80px;height:80px;border-radius:50%;background:#667eea;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto;cursor:pointer;">👥</div>
             <p style="font-size:12px;color:#999;margin-top:5px;">Tap to add photo</p>
         </div>
         <input type="text" id="groupName" placeholder="Group Name" />
         <input type="text" id="groupDescription" placeholder="Group Description (optional)" style="margin-top:10px;" />
-        <p style="margin:15px 0 10px;font-weight:600;">Select Members:</p>
-        <div id="groupMembersList"></div>
+        <p style="margin:15px 0 10px;font-weight:600;">Add Members:</p>
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+            <input type="text" id="groupSearchInput" placeholder="Search @username or email..." style="margin:0;flex:1;" oninput="searchGroupMembers()" />
+        </div>
+        <div id="groupSearchResults"></div>
+        <div id="groupSelectedMembers" style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;"></div>
+        <div id="groupMembersList" style="display:none;"></div>
         <button onclick="createGroup()" style="margin-top:20px;">Create Group</button>
     </div>
 </div>
@@ -1833,34 +2102,35 @@ body.dark .pinned-banner {
 <!-- Chat Screen -->
 <div id="chatScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToMain()">â†</button>
+        <button class="back-btn" onclick="backToMain()">←</button>
         <div class="chat-header-user" onclick="showOtherUserProfile()" style="cursor:pointer;">
             <img id="chatHeaderPhoto" class="header-avatar" style="display:none;" />
-            <span id="chatHeaderIcon" class="header-avatar">ðŸ‘¤</span>
+            <span id="chatHeaderIcon" class="header-avatar">👤</span>
             <div class="chat-header-user-info">
                 <h2 id="chatUserName"></h2>
                 <span id="chatUserStatus" class="chat-user-status">Online</span>
             </div>
         </div>
         <div class="header-right">
-            <button class="call-btn" onclick="showChatMenu()">â‹®</button>
-            <button class="call-btn" onclick="startVideoCall()">ðŸ“¹</button>
-            <button class="call-btn" onclick="startAudioCall()">ðŸ“ž</button>
+            <button class="call-btn" onclick="showChatMenu()">⋮</button>
+            <button class="call-btn" onclick="startVideoCall()">📹</button>
+            <button class="call-btn" onclick="startAudioCall()">📞</button>
         </div>
     </div>
     <div id="chatMenu" class="dropdown-menu hidden">
-        <div class="dropdown-item" onclick="searchMessages()">ðŸ” Search</div>
-        <div class="dropdown-item" onclick="showStarredMessages()">â­ Starred</div>
-        <div class="dropdown-item" onclick="showPinnedMessages()">ðŸ“Œ Pinned</div>
-        <div class="dropdown-item" onclick="showMediaGallery()">ï¿½ Media</div>
-        <div class="dropdown-item" onclick="showDisappearingSettings()">â±ï¸ Disappearing</div>
-        <div class="dropdown-item" onclick="muteChatToggle()">ðŸ”• Mute</div>
-        <div class="dropdown-item" onclick="archiveChat()">ï¿½ Archive</div>
-        <div class="dropdown-item" onclick="showChatNotifSettings()">ðŸ”” Notifications</div>
-        <div class="dropdown-item" onclick="showExportChat()">ðŸ“¤ Export Chat</div>
-        <div class="dropdown-item" onclick="changeChatWallpaper()">ï¿½ï¸ Wallpaper</div>
-        <div class="dropdown-item" onclick="deleteChat()">ðŸ—‘ï¸ Delete Chat</div>
-        <div class="dropdown-item" onclick="blockUser()">ðŸš« Block</div>
+        <div class="dropdown-item" onclick="searchMessages()">🔍 Search</div>
+        <div class="dropdown-item" onclick="showStarredMessages()">⭐ Starred</div>
+        <div class="dropdown-item" onclick="showPinnedMessages()">📌 Pinned</div>
+        <div class="dropdown-item" onclick="showMediaGallery()">� Media</div>
+        <div class="dropdown-item" onclick="showDisappearingSettings()">⏱️ Disappearing</div>
+        <div class="dropdown-item" onclick="muteChatToggle()">🔕 Mute</div>
+        <div class="dropdown-item" onclick="archiveChat()">� Archive</div>
+        <div class="dropdown-item" onclick="showChatNotifSettings()">🔔 Notifications</div>
+        <div class="dropdown-item" onclick="showExportChat()">📤 Export Chat</div>
+        <div class="dropdown-item" onclick="changeChatWallpaper()">�️ Wallpaper</div>
+        <div class="dropdown-item" onclick="deleteChat()">🗑️ Delete Chat</div>
+        <div class="dropdown-item" onclick="blockUser()">🚫 Block</div>
+        <div class="dropdown-item" onclick="reportUser()" style="color:#ff4444;">⚠️ Report</div>
     </div>
     <div id="messageSearchBar" class="hidden" style="padding:10px;background:#f0f0f0;">
         <input type="text" id="messageSearchInput" placeholder="Search messages..." oninput="filterMessages()" style="margin:0;" />
@@ -1872,23 +2142,23 @@ body.dark .pinned-banner {
             <div class="reply-preview-label">Replying to</div>
             <div id="replyText" class="reply-preview-text"></div>
         </div>
-        <button class="cancel-reply-btn" onclick="cancelReply()">âœ•</button>
+        <button class="cancel-reply-btn" onclick="cancelReply()">✕</button>
     </div>
     <div class="input-container">
-        <button class="attach-btn" onclick="showAttachMenu()">ðŸ“Ž</button>
-        <button class="attach-btn" onclick="toggleVoiceRecord()" id="voiceBtn">ðŸŽ¤</button>
-        <button class="emoji-btn" onclick="toggleEmojiPicker()">ðŸ˜Š</button>
+        <button class="attach-btn" onclick="showAttachMenu()">📎</button>
+        <button class="attach-btn" onclick="toggleVoiceRecord()" id="voiceBtn">🎤</button>
+        <button class="emoji-btn" onclick="toggleEmojiPicker()">😊</button>
         <input type="text" id="messageInput" placeholder="Type a message..." oninput="handleTyping()" />
         <button onclick="sendMessage()">Send</button>
     </div>
     <div id="attachMenu" class="attach-menu hidden">
-        <div class="attach-item" onclick="document.getElementById('photoAttach').click()">ðŸ“· Photo</div>
-        <div class="attach-item" onclick="document.getElementById('videoAttach').click()">ðŸŽ¥ Video</div>
-        <div class="attach-item" onclick="document.getElementById('docAttach').click()">ðŸ“„ Document</div>
-        <div class="attach-item" onclick="shareLocation()">ðŸ“ Location</div>
-        <div class="attach-item" onclick="shareContact()">ðŸ‘¤ Contact</div>
-        <div class="attach-item" onclick="showPollScreen()">ðŸ“Š Poll</div>
-        <div class="attach-item" onclick="showScheduleModal()">â° Schedule</div>
+        <div class="attach-item" onclick="document.getElementById('photoAttach').click()">📷 Photo</div>
+        <div class="attach-item" onclick="document.getElementById('videoAttach').click()">🎥 Video</div>
+        <div class="attach-item" onclick="document.getElementById('docAttach').click()">📄 Document</div>
+        <div class="attach-item" onclick="shareLocation()">📍 Location</div>
+        <div class="attach-item" onclick="shareContact()">👤 Contact</div>
+        <div class="attach-item" onclick="showPollScreen()">📊 Poll</div>
+        <div class="attach-item" onclick="showScheduleModal()">⏰ Schedule</div>
     </div>
     <input type="file" id="photoAttach" accept="image/*" style="display:none;" onchange="attachFile('photo')" />
     <input type="file" id="videoAttach" accept="video/*" style="display:none;" onchange="attachFile('video')" />
@@ -1901,20 +2171,21 @@ body.dark .pinned-banner {
 <!-- Other User Profile -->
 <div id="otherUserProfileScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToChatFromProfile()">â†</button>
+        <button class="back-btn" onclick="backToChatFromProfile()">←</button>
         <h2>Profile</h2><div></div>
     </div>
     <div class="profile-container">
         <div class="profile-avatar">
             <img id="otherProfileImage" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;" />
-            <span id="otherProfileIcon">ðŸ‘¤</span>
+            <span id="otherProfileIcon">👤</span>
         </div>
         <h2 id="otherProfileName" style="margin-top:20px;"></h2>
         <p id="otherProfileUsername" style="color:#667eea;"></p>
+        <p id="otherProfilePhone" style="color:#666;margin-top:3px;"></p>
         <p id="otherProfileEmail"></p>
         <p id="otherProfileBio" style="margin-top:5px;color:#666;font-style:italic;"></p>
         <p id="otherProfileStatus" style="margin-top:10px;"></p>
-        <button onclick="blockUser()" style="margin-top:20px;background:#ff4444;width:auto;padding:10px 20px;">ðŸš« Block</button>
+        <button onclick="blockUser()" style="margin-top:20px;background:#ff4444;width:auto;padding:10px 20px;">🚫 Block</button>
         <button onclick="backToChatFromProfile()" style="margin-top:10px;">Back</button>
     </div>
 </div>
@@ -1922,25 +2193,68 @@ body.dark .pinned-banner {
 <!-- Starred Messages -->
 <div id="starredScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showScreen('chatScreen')">â†</button>
-        <h2>â­ Starred</h2><div></div>
+        <button class="back-btn" onclick="showScreen('chatScreen')">←</button>
+        <h2>⭐ Starred</h2><div></div>
     </div>
     <div id="starredList" style="flex:1;overflow-y:auto;padding:10px;background:#f5f5f5;"></div>
 </div>
 
-<!-- Audio Call -->
-<div id="audioCallScreen" class="screen hidden">
-    <div class="call-container">
-        <div class="call-avatar">
-            <img id="callUserPhoto" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;" />
-            <span id="callUserIcon">ðŸ‘¤</span>
+<!-- Incoming Call Screen -->
+<div id="incomingCallScreen" class="screen hidden" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:5000;">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 30px 50px;background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);">
+        <div style="text-align:center;">
+            <p style="color:rgba(255,255,255,0.6);font-size:16px;margin-bottom:20px;">Incoming call...</p>
+            <div id="incomingCallAvatar" style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:55px;margin:0 auto 20px;box-shadow:0 0 0 15px rgba(102,126,234,0.15),0 0 0 30px rgba(102,126,234,0.08);">👤</div>
+            <h2 id="incomingCallerName" style="color:white;font-size:28px;font-weight:700;margin-bottom:8px;"></h2>
+            <p id="incomingCallType" style="color:rgba(255,255,255,0.6);font-size:15px;">HeyApp Audio Call</p>
         </div>
-        <h2 id="callingUserName"></h2>
-        <p id="callStatus">Calling...</p>
-        <div class="call-buttons">
-            <button class="end-call-btn" onclick="endCall()">ðŸ“µ</button>
+        <div style="display:flex;justify-content:space-around;width:100%;max-width:280px;">
+            <div style="text-align:center;">
+                <button onclick="rejectCall()" style="width:72px;height:72px;border-radius:50%;background:#ff3b30;border:none;font-size:30px;cursor:pointer;box-shadow:0 8px 25px rgba(255,59,48,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto;">📵</button>
+                <p style="color:rgba(255,255,255,0.7);font-size:13px;margin-top:12px;">Decline</p>
+            </div>
+            <div style="text-align:center;">
+                <button onclick="acceptCall()" style="width:72px;height:72px;border-radius:50%;background:#34c759;border:none;font-size:30px;cursor:pointer;box-shadow:0 8px 25px rgba(52,199,89,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto;">📞</button>
+                <p style="color:rgba(255,255,255,0.7);font-size:13px;margin-top:12px;">Accept</p>
+            </div>
         </div>
     </div>
+</div>
+
+<!-- Audio Call -->
+<div id="audioCallScreen" class="screen hidden">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 30px 50px;background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);">
+        <div style="text-align:center;">
+            <p id="callStatus" style="color:rgba(255,255,255,0.6);font-size:15px;margin-bottom:20px;">Calling...</p>
+            <div style="position:relative;width:110px;height:110px;margin:0 auto 20px;">
+                <img id="callUserPhoto" style="display:none;width:110px;height:110px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 15px rgba(102,126,234,0.15);" />
+                <div id="callUserIcon" style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:55px;box-shadow:0 0 0 15px rgba(102,126,234,0.15),0 0 0 30px rgba(102,126,234,0.08);">👤</div>
+            </div>
+            <h2 id="callingUserName" style="color:white;font-size:28px;font-weight:700;margin-bottom:8px;"></h2>
+            <p id="callTimer" style="color:rgba(255,255,255,0.6);font-size:16px;display:none;">00:00</p>
+        </div>
+        <div style="width:100%;max-width:300px;">
+            <div style="display:flex;justify-content:space-around;margin-bottom:40px;">
+                <div style="text-align:center;">
+                    <button id="muteBtn" onclick="toggleMute()" style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto;">🎤</button>
+                    <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-top:8px;">Mute</p>
+                </div>
+                <div style="text-align:center;">
+                    <button id="speakerBtn" onclick="toggleSpeaker()" style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto;">🔊</button>
+                    <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-top:8px;">Speaker</p>
+                </div>
+                <div style="text-align:center;">
+                    <button onclick="showScreen('chatScreen')" style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto;">💬</button>
+                    <p style="color:rgba(255,255,255,0.6);font-size:12px;margin-top:8px;">Message</p>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <button onclick="endCall()" style="width:72px;height:72px;border-radius:50%;background:#ff3b30;border:none;font-size:30px;cursor:pointer;box-shadow:0 8px 25px rgba(255,59,48,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto;">📵</button>
+                <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-top:10px;">End Call</p>
+            </div>
+        </div>
+    </div>
+    <audio id="remoteAudio" autoplay></audio>
 </div>
 
 <!-- Video Call -->
@@ -1948,47 +2262,72 @@ body.dark .pinned-banner {
     <div class="video-call-container">
         <div class="video-call-avatar">
             <img id="videoCallUserPhoto" style="display:none;width:100%;height:100%;border-radius:20px;object-fit:cover;" />
-            <span id="videoCallUserIcon">ðŸ‘¤</span>
+            <span id="videoCallUserIcon">👤</span>
         </div>
         <div class="video-call-info">
             <h2 id="videoCallingUserName"></h2>
             <p id="videoCallStatus">Calling...</p>
         </div>
         <div class="video-call-buttons">
-            <button class="end-call-btn" onclick="endVideoCall()">ðŸ“µ</button>
+            <button class="end-call-btn" onclick="endVideoCall()">📵</button>
         </div>
     </div>
 </div>
 
 <!-- Reaction Picker -->
 <div id="reactionPicker" class="reaction-picker hidden">
-    <span onclick="sendReaction('â¤ï¸')">â¤ï¸</span>
-    <span onclick="sendReaction('ðŸ˜‚')">ðŸ˜‚</span>
-    <span onclick="sendReaction('ðŸ˜®')">ðŸ˜®</span>
-    <span onclick="sendReaction('ðŸ˜¢')">ðŸ˜¢</span>
-    <span onclick="sendReaction('ðŸ‘')">ðŸ‘</span>
-    <span onclick="sendReaction('ðŸ‘Ž')">ðŸ‘Ž</span>
+    <span onclick="sendReaction('❤️')">❤️</span>
+    <span onclick="sendReaction('😂')">😂</span>
+    <span onclick="sendReaction('😮')">😮</span>
+    <span onclick="sendReaction('😢')">😢</span>
+    <span onclick="sendReaction('👍')">👍</span>
+    <span onclick="sendReaction('👎')">👎</span>
 </div>
 
 <!-- Image Modal -->
 <div id="imageModal" class="image-modal hidden" onclick="closeImageModal()">
-    <button class="close-modal-btn" onclick="closeImageModal()">âœ•</button>
+    <button class="close-modal-btn" onclick="closeImageModal()">✕</button>
     <img id="modalImage" src="" alt="Preview" />
 </div>
 
 <!-- Forward Modal -->
 <div id="forwardModal" class="modal-overlay hidden">
     <div class="modal-box">
-        <h3>â†ªï¸ Forward to</h3>
+        <h3>↪️ Forward to</h3>
         <div id="forwardUserList"></div>
         <button onclick="closeForwardModal()" style="margin-top:15px;background:#999;">Cancel</button>
+    </div>
+</div>
+
+<!-- AI Chat Screen -->
+<div id="aiChatScreen" class="screen hidden">
+    <div class="header">
+        <button class="back-btn" onclick="backToMain()">←</button>
+        <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center;">
+            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:20px;">🤖</div>
+            <div>
+                <div style="font-weight:700;font-size:16px;">HeyAI</div>
+                <div style="font-size:11px;opacity:0.8;">AI Assistant</div>
+            </div>
+        </div>
+        <button class="icon-btn" onclick="clearAIChat()">🗑️</button>
+    </div>
+    <div id="aiMessages" style="flex:1;overflow-y:auto;padding:15px;background:#f5f5f5;display:flex;flex-direction:column;gap:10px;">
+        <div class="ai-msg ai-bot-msg">
+            <div class="ai-avatar">🤖</div>
+            <div class="ai-bubble">Hi! I'm HeyAI, your personal assistant. Ask me anything! 😊</div>
+        </div>
+    </div>
+    <div class="input-container">
+        <input type="text" id="aiInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')sendAIMessage()" />
+        <button onclick="sendAIMessage()" id="aiSendBtn">Send</button>
     </div>
 </div>
 
 <!-- Wallpaper Modal -->
 <div id="wallpaperModal" class="modal-overlay hidden">
     <div class="modal-box">
-        <h3>ðŸ–¼ï¸ Chat Wallpaper</h3>
+        <h3>🖼️ Chat Wallpaper</h3>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0;">
             <div onclick="setWallpaper('none')" style="height:60px;background:#f5f5f5;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;">None</div>
             <div onclick="setWallpaper('#e8f5e9')" style="height:60px;background:#e8f5e9;border-radius:8px;cursor:pointer;"></div>
@@ -2004,7 +2343,7 @@ body.dark .pinned-banner {
 <!-- Theme Color Modal -->
 <div id="themeModal" class="modal-overlay hidden">
     <div class="modal-box">
-        <h3>ðŸŽ¨ Theme Color</h3>
+        <h3>🎨 Theme Color</h3>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0;">
             <div onclick="setTheme('#667eea','#764ba2')" style="height:50px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:8px;cursor:pointer;"></div>
             <div onclick="setTheme('#25D366','#128C7E')" style="height:50px;background:linear-gradient(135deg,#25D366,#128C7E);border-radius:8px;cursor:pointer;"></div>
@@ -2023,8 +2362,8 @@ body.dark .pinned-banner {
 <!-- Media Gallery Screen -->
 <div id="mediaGalleryScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showScreen('chatScreen')">â†</button>
-        <h2>ðŸ“ Media Gallery</h2><div></div>
+        <button class="back-btn" onclick="showScreen('chatScreen')">←</button>
+        <h2>📁 Media Gallery</h2><div></div>
     </div>
     <div id="mediaGalleryGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px;overflow-y:auto;flex:1;"></div>
 </div>
@@ -2032,8 +2371,8 @@ body.dark .pinned-banner {
 <!-- Chat Archive Screen -->
 <div id="archiveScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToMain()">â†</button>
-        <h2>ðŸ“¦ Archived Chats</h2><div></div>
+        <button class="back-btn" onclick="backToMain()">←</button>
+        <h2>📦 Archived Chats</h2><div></div>
     </div>
     <div id="archivedChatList" style="flex:1;overflow-y:auto;"></div>
 </div>
@@ -2041,8 +2380,8 @@ body.dark .pinned-banner {
 <!-- Login History Screen -->
 <div id="loginHistoryScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
-        <h2>ðŸ” Login History</h2><div></div>
+        <button class="back-btn" onclick="showSettings()">←</button>
+        <h2>🔐 Login History</h2><div></div>
     </div>
     <div id="loginHistoryList" style="flex:1;overflow-y:auto;padding:10px;"></div>
 </div>
@@ -2050,21 +2389,21 @@ body.dark .pinned-banner {
 <!-- Language Screen -->
 <div id="languageScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
-        <h2>ðŸŒ Language</h2><div></div>
+        <button class="back-btn" onclick="showSettings()">←</button>
+        <h2>🌐 Language</h2><div></div>
     </div>
     <div class="settings-container">
-        <div class="settings-item" onclick="setLanguage('en')"><span>ðŸ‡ºðŸ‡¸ English</span><span id="lang_en">âœ“</span></div>
-        <div class="settings-item" onclick="setLanguage('hi')"><span>ðŸ‡®ðŸ‡³ Hindi</span><span id="lang_hi"></span></div>
-        <div class="settings-item" onclick="setLanguage('ur')"><span>ðŸ‡µðŸ‡° Urdu</span><span id="lang_ur"></span></div>
+        <div class="settings-item" onclick="setLanguage('en')"><span>🇺🇸 English</span><span id="lang_en">✓</span></div>
+        <div class="settings-item" onclick="setLanguage('hi')"><span>🇮🇳 Hindi</span><span id="lang_hi"></span></div>
+        <div class="settings-item" onclick="setLanguage('ur')"><span>🇵🇰 Urdu</span><span id="lang_ur"></span></div>
     </div>
 </div>
 
 <!-- Group Info Screen -->
 <div id="groupInfoScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="backToMain()">â†</button>
-        <h2>ðŸ‘¥ Group Info</h2><div></div>
+        <button class="back-btn" onclick="backToMain()">←</button>
+        <h2>👥 Group Info</h2><div></div>
     </div>
     <div id="groupInfoContent" style="flex:1;overflow-y:auto;padding:20px;"></div>
 </div>
@@ -2072,8 +2411,8 @@ body.dark .pinned-banner {
 <!-- Polls Screen -->
 <div id="pollScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showScreen('chatScreen')">â†</button>
-        <h2>ðŸ“Š Create Poll</h2><div></div>
+        <button class="back-btn" onclick="showScreen('chatScreen')">←</button>
+        <h2>📊 Create Poll</h2><div></div>
     </div>
     <div style="padding:20px;">
         <input type="text" id="pollQuestion" placeholder="Poll question..." />
@@ -2088,11 +2427,11 @@ body.dark .pinned-banner {
 <!-- Auto Reply Screen -->
 <div id="autoReplyScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
-        <h2>ðŸ¤– Auto Reply</h2><div></div>
+        <button class="back-btn" onclick="showSettings()">←</button>
+        <h2>🤖 Auto Reply</h2><div></div>
     </div>
     <div style="padding:20px;">
-        <div class="settings-item" onclick="toggleAutoReply()"><span>ðŸ¤– Auto Reply</span><span id="autoReplyStatus">Off</span></div>
+        <div class="settings-item" onclick="toggleAutoReply()"><span>🤖 Auto Reply</span><span id="autoReplyStatus">Off</span></div>
         <div style="margin-top:20px;">
             <p style="margin-bottom:10px;font-weight:600;">Away Message:</p>
             <textarea id="autoReplyMsg" placeholder="I'm away right now, will reply soon..." style="min-height:100px;"></textarea>
@@ -2104,27 +2443,27 @@ body.dark .pinned-banner {
 <!-- QR Code Screen -->
 <div id="qrScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showProfile()">â†</button>
-        <h2>ðŸ“± My QR Code</h2><div></div>
+        <button class="back-btn" onclick="showProfile()">←</button>
+        <h2>📱 My QR Code</h2><div></div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:30px;">
         <div id="qrCodeDisplay" style="width:200px;height:200px;background:#f0f0f0;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:14px;text-align:center;padding:20px;border:3px solid #667eea;"></div>
         <p style="margin-top:20px;color:#666;text-align:center;">Share this QR code so others can find you</p>
-        <button onclick="copyProfileLink()" style="margin-top:20px;width:auto;padding:12px 30px;">ðŸ“‹ Copy Profile Link</button>
+        <button onclick="copyProfileLink()" style="margin-top:20px;width:auto;padding:12px 30px;">📋 Copy Profile Link</button>
     </div>
 </div>
 
 <!-- Notification Per Chat Screen -->
 <div id="chatNotifScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showScreen('chatScreen')">â†</button>
-        <h2>ðŸ”” Chat Notifications</h2><div></div>
+        <button class="back-btn" onclick="showScreen('chatScreen')">←</button>
+        <h2>🔔 Chat Notifications</h2><div></div>
     </div>
     <div class="settings-container">
-        <div class="settings-item" onclick="toggleChatMuteNotif()"><span>ðŸ”• Mute Notifications</span><span id="chatMuteStatus">Off</span></div>
-        <div class="settings-item" onclick="toggleMsgPreview()"><span>ðŸ‘ï¸ Message Preview</span><span id="msgPreviewStatus">On</span></div>
+        <div class="settings-item" onclick="toggleChatMuteNotif()"><span>🔕 Mute Notifications</span><span id="chatMuteStatus">Off</span></div>
+        <div class="settings-item" onclick="toggleMsgPreview()"><span>👁️ Message Preview</span><span id="msgPreviewStatus">On</span></div>
         <div class="settings-item">
-            <span>ðŸ”” Notification Tone</span>
+            <span>🔔 Notification Tone</span>
             <select onchange="setChatTone(this.value)" style="border:none;background:transparent;font-size:14px;">
                 <option value="default">Default</option>
                 <option value="ping">Ping</option>
@@ -2132,15 +2471,15 @@ body.dark .pinned-banner {
                 <option value="none">None</option>
             </select>
         </div>
-        <div class="settings-item" onclick="toggleVibration()"><span>ðŸ“³ Vibration</span><span id="vibrationStatus">On</span></div>
+        <div class="settings-item" onclick="toggleVibration()"><span>📳 Vibration</span><span id="vibrationStatus">On</span></div>
     </div>
 </div>
 
 <!-- Pinned Messages Screen -->
 <div id="pinnedScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showScreen('chatScreen')">â†</button>
-        <h2>ðŸ“Œ Pinned Messages</h2><div></div>
+        <button class="back-btn" onclick="showScreen('chatScreen')">←</button>
+        <h2>📌 Pinned Messages</h2><div></div>
     </div>
     <div id="pinnedList" style="flex:1;overflow-y:auto;padding:10px;background:#f5f5f5;"></div>
 </div>
@@ -2148,20 +2487,20 @@ body.dark .pinned-banner {
 <!-- Chat Export Screen -->
 <div id="exportScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showScreen('chatScreen')">â†</button>
-        <h2>ðŸ“¤ Export Chat</h2><div></div>
+        <button class="back-btn" onclick="showScreen('chatScreen')">←</button>
+        <h2>📤 Export Chat</h2><div></div>
     </div>
     <div style="padding:20px;display:flex;flex-direction:column;gap:15px;">
         <p style="color:#666;">Export this chat as a text file</p>
-        <button onclick="exportChatTxt()">ðŸ“„ Export as Text</button>
-        <button onclick="exportChatJSON()" style="background:#764ba2;">ðŸ“‹ Export as JSON</button>
+        <button onclick="exportChatTxt()">📄 Export as Text</button>
+        <button onclick="exportChatJSON()" style="background:#764ba2;">📋 Export as JSON</button>
     </div>
 </div>
 
 <!-- Translate Modal -->
 <div id="translateModal" class="modal-overlay hidden">
     <div class="modal-box">
-        <h3>ðŸŒ Translate Message</h3>
+        <h3>🌐 Translate Message</h3>
         <p id="translateOriginal" style="margin:15px 0;padding:10px;background:#f5f5f5;border-radius:8px;font-style:italic;"></p>
         <select id="translateLang" style="width:100%;padding:10px;border-radius:8px;border:2px solid #e0e0e0;margin-bottom:15px;">
             <option value="hi">Hindi</option>
@@ -2180,7 +2519,7 @@ body.dark .pinned-banner {
 <!-- Schedule Message Modal -->
 <div id="scheduleModal" class="modal-overlay hidden">
     <div class="modal-box">
-        <h3>â° Schedule Message</h3>
+        <h3>⏰ Schedule Message</h3>
         <input type="text" id="scheduleText" placeholder="Message to schedule..." />
         <input type="datetime-local" id="scheduleTime" style="margin-top:10px;" />
         <button onclick="scheduleMessage()" style="margin-top:15px;">Schedule</button>
@@ -2191,11 +2530,11 @@ body.dark .pinned-banner {
 <!-- 2FA Screen -->
 <div id="twoFAScreen" class="screen hidden">
     <div class="header">
-        <button class="back-btn" onclick="showSettings()">â†</button>
-        <h2>ðŸ” Two-Factor Auth</h2><div></div>
+        <button class="back-btn" onclick="showSettings()">←</button>
+        <h2>🔐 Two-Factor Auth</h2><div></div>
     </div>
     <div style="padding:20px;">
-        <div class="settings-item" onclick="toggle2FA()"><span>ðŸ” 2FA</span><span id="twoFAStatus">Off</span></div>
+        <div class="settings-item" onclick="toggle2FA()"><span>🔐 2FA</span><span id="twoFAStatus">Off</span></div>
         <div id="twoFASetup" class="hidden" style="margin-top:20px;">
             <p style="margin-bottom:10px;color:#666;">Set a 6-digit backup PIN:</p>
             <input type="password" id="twoFAPin" placeholder="6-digit PIN" maxlength="6" />
@@ -2205,11 +2544,26 @@ body.dark .pinned-banner {
 </div>
 
 </div>
-<script type="module">
+
+<script>
+
+firebase.initializeApp({
+    apiKey: "AIzaSyB7j7S0l-QVw7Cj-WPz69XRFVbH9omdt2c",
+    authDomain: "heyapp-36a08.firebaseapp.com",
+    databaseURL: "https://heyapp-36a08-default-rtdb.firebaseio.com",
+    projectId: "heyapp-36a08",
+    storageBucket: "heyapp-36a08.firebasestorage.app",
+    messagingSenderId: "477810488469",
+    appId: "1:477810488469:web:7777f59533ffc0f34bd79c"
+});
+const auth = firebase.auth();
+const db = firebase.database();
+const dbRef = (path) => db.ref(path);
+
 // HeyApp - Complete Firebase Real-time Chat
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getDatabase, ref, set, get, onValue, push, update, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyB7j7S0l-QVw7Cj-WPz69XRFVbH9omdt2c",
@@ -2221,9 +2575,9 @@ const firebaseConfig = {
     appId: "1:477810488469:web:7777f59533ffc0f34bd79c"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
+
+
+
 
 // State
 let currentUser = null;
@@ -2250,13 +2604,31 @@ if (darkMode) {
 }
 
 // Auth State
-onAuthStateChanged(auth, async (user) => {
+auth.onAuthStateChanged( async (user) => {
+    console.log('Auth state:', user ? user.email : 'null');
     if (user) {
-        const snap = await get(ref(db, `users/${user.uid}`));
-        currentUser = snap.val();
-        currentUser.uid = user.uid;
-        updateOnlineStatus(true);
-        showMainScreen();
+        try {
+            const snap = await dbRef(`users/${user.uid}`).once("value");
+            currentUser = snap.val() || {};
+            currentUser.uid = user.uid;
+            currentUser.email = currentUser.email || user.email;
+            currentUser.name = currentUser.name || user.displayName || user.email.split('@')[0];
+            if (!snap.val()) {
+                await dbRef(`users/${user.uid}`).set({
+                    uid: user.uid, name: currentUser.name,
+                    email: user.email, photo: '', bio: '', createdAt: Date.now()
+                });
+            }
+            console.log('currentUser:', currentUser);
+            updateOnlineStatus(true);
+            console.log('Calling showMainScreen...');
+            showMainScreen();
+            console.log('showMainScreen done');
+        } catch(e) {
+            console.error('Error:', e);
+            currentUser = { uid: user.uid, email: user.email, name: user.email.split('@')[0] };
+            showMainScreen();
+        }
     } else {
         currentUser = null;
         showScreen('loginScreen');
@@ -2276,13 +2648,14 @@ window.showRegister = () => showScreen('registerScreen');
 window.register = async () => {
     const name = document.getElementById('registerName').value.trim();
     const email = document.getElementById('registerEmail').value.trim();
+    const phone = document.getElementById('registerPhone').value.trim();
     const password = document.getElementById('registerPassword').value;
     if (!name || !email || !password) return alert('Please fill all fields');
     try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-        await set(ref(db, `users/${cred.user.uid}`), {
-            uid: cred.user.uid, name, email, photo: '', bio: '', createdAt: Date.now()
+        const cred = await auth.createUserWithEmailAndPassword(email, password);
+        await cred.user.updateProfile({ displayName: name });
+        await dbRef(`users/${cred.user.uid}`).set({
+            uid: cred.user.uid, name, email, phone: phone || '', photo: '', bio: '', createdAt: Date.now()
         });
     } catch (e) { alert(e.message); }
 };
@@ -2292,20 +2665,20 @@ window.login = async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     try {
-        await signInWithEmailAndPassword(auth, email, password);
+        await auth.signInWithEmailAndPassword(email, password);
     } catch (e) { alert('Wrong email or password!'); }
 };
 
 // Logout
 window.logout = async () => {
     updateOnlineStatus(false);
-    await signOut(auth);
+    await auth.signOut();
 };
 
 // Online Status
 function updateOnlineStatus(isOnline) {
     if (!currentUser) return;
-    update(ref(db, `users/${currentUser.uid}`), { online: isOnline, lastSeen: Date.now() });
+    dbRef(`users/${currentUser.uid}`).update({ online: isOnline, lastSeen: Date.now() });
 }
 
 setInterval(() => { if (currentUser) updateOnlineStatus(true); }, 30000);
@@ -2319,7 +2692,7 @@ function showMainScreen() {
 }
 
 window.backToMain = () => {
-    if (messagesListener) { messagesListener(); messagesListener = null; }
+    if (messagesListener) { try{messagesListener.off();}catch(e){} messagesListener = null; }
     if (window.statusInterval) { clearInterval(window.statusInterval); window.statusInterval = null; }
     showMainScreen();
 };
@@ -2335,7 +2708,7 @@ window.toggleDarkMode = () => {
 function updateDarkModeUI() {
     const btn = document.getElementById('darkModeBtn');
     const status = document.getElementById('darkModeStatus');
-    if (btn) btn.textContent = darkMode ? 'â˜€ï¸' : 'ðŸŒ™';
+    if (btn) btn.textContent = darkMode ? '☀️' : '🌙';
     if (status) status.textContent = darkMode ? 'On' : 'Off';
 }
 
@@ -2366,7 +2739,7 @@ window.switchTab = (tabName) => {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelector(`.tab-item:nth-child(${tabName === 'status' ? 1 : tabName === 'calls' ? 2 : 3})`).classList.add('active');
     document.getElementById(`${tabName}Tab`).classList.add('active');
-    if (tabName === 'chats') loadUsers();
+    if (tabName === 'chats') { loadRecentChats(); loadUsers(document.getElementById('searchInput')?.value?.toLowerCase()?.trim() || ''); }
     if (tabName === 'status') loadStatuses();
     if (tabName === 'calls') loadCallHistory();
 };
@@ -2374,9 +2747,15 @@ window.switchTab = (tabName) => {
 // Load Users
 function loadUsers(searchTerm = '') {
     const chatListDiv = document.getElementById('chatList');
-    chatListDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">Loading...</p>';
 
-    onValue(ref(db, 'users'), (snapshot) => {
+    if (!searchTerm) {
+        chatListDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">🔍 Email se user search karo</p>';
+        return;
+    }
+
+    chatListDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">Searching...</p>';
+
+    dbRef('users').once('value').then((snapshot) => {
         chatListDiv.innerHTML = '';
         let found = 0;
         snapshot.forEach((child) => {
@@ -2394,7 +2773,7 @@ function loadUsers(searchTerm = '') {
 
             const photoHtml = user.photo
                 ? `<img src="${user.photo}" class="chat-avatar" />`
-                : `<div class="chat-avatar">ðŸ‘¤</div>`;
+                : `<div class="chat-avatar">👤</div>`;
 
             const statusColor = user.online ? 'color:#25D366' : 'color:#999';
             const statusText = user.online ? 'Online' : getLastSeen(user.lastSeen);
@@ -2409,7 +2788,7 @@ function loadUsers(searchTerm = '') {
             chatListDiv.appendChild(div);
         });
         if (found === 0) chatListDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No users found</p>';
-    }, { onlyOnce: true });
+    });
 }
 
 window.searchUsers = () => {
@@ -2444,7 +2823,7 @@ window.openChat = (otherUser) => {
 
 function updateChatStatus() {
     if (!currentOtherUser) return;
-    get(ref(db, `users/${currentOtherUser.uid}`)).then(snap => {
+    dbRef(`users/${currentOtherUser.uid}`).once("value").then(snap => {
         const u = snap.val();
         const el = document.getElementById('chatUserStatus');
         if (u?.online) { el.textContent = 'Online'; el.style.color = '#25D366'; }
@@ -2467,7 +2846,7 @@ document.addEventListener('click', (e) => {
 // Delete Chat
 window.deleteChat = async () => {
     if (!confirm('Delete this entire chat?')) return;
-    await remove(ref(db, `chats/${currentChatId}`));
+    await dbRef(`chats/${currentChatId}`).remove();
     document.getElementById('chatMenu').classList.add('hidden');
     backToMain();
 };
@@ -2503,12 +2882,12 @@ window.filterMessages = () => {
 
 // Listen Messages (Real-time)
 function listenMessages() {
-    if (messagesListener) messagesListener();
+    if (messagesListener) { try{messagesListener.off();}catch(e){} }
     const messagesDiv = document.getElementById('messages');
     messagesDiv.innerHTML = '';
     let isFirst = true;
 
-    messagesListener = onValue(ref(db, `chats/${currentChatId}/messages`), (snapshot) => {
+    messagesListener = dbRef(`chats/${currentChatId}/messages`).on("value", (snapshot) => {
         const prevCount = messagesDiv.children.length;
         messagesDiv.innerHTML = '';
         let count = 0;
@@ -2531,17 +2910,17 @@ function renderMessage(msg) {
     div.className = `message ${isMine ? 'my-message' : 'other-message'}`;
     div.dataset.msgId = msg.id;
 
-    let replyHtml = msg.replyTo ? `<div class="reply-preview-msg">â†©ï¸ ${msg.replyTo.text}</div>` : '';
+    let replyHtml = msg.replyTo ? `<div class="reply-preview-msg">↩️ ${msg.replyTo.text}</div>` : '';
     let contentHtml = '';
 
     if (msg.image) contentHtml += `<img src="${msg.image}" class="message-image" onclick="openImageModal('${msg.image}')" />`;
     if (msg.audio) contentHtml += `
         <div class="voice-message">
-            <button class="voice-play-btn" onclick="playAudio('${msg.audio}')">â–¶</button>
+            <button class="voice-play-btn" onclick="playAudio('${msg.audio}')">▶</button>
             <div class="voice-waveform"></div>
             <span class="voice-duration">${msg.audioDuration || '0:00'}</span>
         </div>`;
-    if (msg.deleted) contentHtml += `<div class="message-text"><i>ðŸš« This message was deleted</i></div>`;
+    if (msg.deleted) contentHtml += `<div class="message-text"><i>🚫 This message was deleted</i></div>`;
     else if (msg.text) contentHtml += `<div class="message-text">${msg.text}</div>`;
 
     // Reactions
@@ -2552,11 +2931,11 @@ function renderMessage(msg) {
         reactionsHtml = `<div class="message-reactions">${Object.entries(reactionCounts).map(([r, c]) => `<span class="reaction-badge">${r} ${c}</span>`).join('')}</div>`;
     }
 
-    const deleteBtn = isMine && !msg.deleted ? `<button class="msg-delete-btn" onclick="deleteMessage('${msg.id}')">ðŸ—‘ï¸</button>` : '';
-    const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}', '${(msg.text || 'Photo').replace(/'/g, "\\'")}')">â†©ï¸</button>` : '';
-    const forwardBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="forwardMessage('${msg.id}', '${(msg.text || '').replace(/'/g, "\\'")}')">â†ªï¸</button>` : '';
-    const reactBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="showReactionPicker('${msg.id}', event)">ðŸ˜Š</button>` : '';
-    const readReceipt = isMine ? (msg.read ? ' âœ“âœ“' : ' âœ“') : '';
+    const deleteBtn = isMine && !msg.deleted ? `<button class="msg-delete-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>` : '';
+    const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}', '${(msg.text || 'Photo').replace(/'/g, "\\'")}')">↩️</button>` : '';
+    const forwardBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="forwardMessage('${msg.id}', '${(msg.text || '').replace(/'/g, "\\'")}')">↪️</button>` : '';
+    const reactBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="showReactionPicker('${msg.id}', event)">😊</button>` : '';
+    const readReceipt = isMine ? (msg.read ? ' ✓✓' : ' ✓') : '';
 
     div.innerHTML = `
         ${replyHtml}
@@ -2576,8 +2955,8 @@ window.sendMessage = async () => {
     const text = input.value.trim();
     if (!text) return;
 
-    const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-    await set(msgRef, {
+    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+    await msgRef.set({
         text, image: null, senderId: currentUser.uid, senderName: currentUser.name,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         timestamp: Date.now(), replyTo: replyingTo || null, deleted: false, read: false
@@ -2592,8 +2971,8 @@ window.attachPhoto = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = async (e) => {
-        const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-        await set(msgRef, {
+        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        await msgRef.set({
             text: '', image: e.target.result, senderId: currentUser.uid, senderName: currentUser.name,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
             timestamp: Date.now(), replyTo: replyingTo || null, deleted: false, read: false
@@ -2607,7 +2986,7 @@ window.attachPhoto = () => {
 // Delete Message
 window.deleteMessage = async (msgId) => {
     if (!confirm('Delete this message?')) return;
-    await update(ref(db, `chats/${currentChatId}/messages/${msgId}`), { deleted: true, text: 'This message was deleted' });
+    await dbRef(`chats/${currentChatId}/messages/${msgId}`).update({ deleted: true, text: 'This message was deleted' });
 };
 
 // Reply
@@ -2631,7 +3010,7 @@ window.forwardMessage = (msgId, text) => {
     list.innerHTML = '';
     modal.classList.remove('hidden');
 
-    get(ref(db, 'users')).then(snapshot => {
+    dbRef('users').once("value").then(snapshot => {
         snapshot.forEach(child => {
             const user = child.val();
             if (user.uid === currentUser.uid) return;
@@ -2639,7 +3018,7 @@ window.forwardMessage = (msgId, text) => {
             div.className = 'forward-user-item';
             div.onclick = () => sendForwardedMessage(user);
             div.innerHTML = `
-                <div class="chat-avatar" style="width:40px;height:40px;font-size:20px;">${user.photo ? `<img src="${user.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />` : 'ðŸ‘¤'}</div>
+                <div class="chat-avatar" style="width:40px;height:40px;font-size:20px;">${user.photo ? `<img src="${user.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />` : '👤'}</div>
                 <span>${user.name}</span>
             `;
             list.appendChild(div);
@@ -2649,9 +3028,9 @@ window.forwardMessage = (msgId, text) => {
 
 async function sendForwardedMessage(toUser) {
     const chatId = getChatKey(currentUser.uid, toUser.uid);
-    const msgRef = push(ref(db, `chats/${chatId}/messages`));
-    await set(msgRef, {
-        text: `â†ªï¸ Forwarded: ${forwardMsgText}`, image: null,
+    const msgRef = dbRef(`chats/${chatId}/messages`).push();
+    await msgRef.set({
+        text: `↪️ Forwarded: ${forwardMsgText}`, image: null,
         senderId: currentUser.uid, senderName: currentUser.name,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         timestamp: Date.now(), deleted: false, read: false
@@ -2676,7 +3055,7 @@ window.showReactionPicker = (msgId, event) => {
 
 window.sendReaction = async (emoji) => {
     if (!selectedReactionMsgId) return;
-    await update(ref(db, `chats/${currentChatId}/messages/${selectedReactionMsgId}/reactions`), {
+    await dbRef(`chats/${currentChatId}/messages/${selectedReactionMsgId}/reactions`).update({
         [currentUser.uid]: emoji
     });
     document.getElementById('reactionPicker').classList.add('hidden');
@@ -2702,8 +3081,8 @@ window.toggleVoiceRecord = async () => {
                 const blob = new Blob(audioChunks, { type: 'audio/webm' });
                 const reader = new FileReader();
                 reader.onload = async (e) => {
-                    const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-                    await set(msgRef, {
+                    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+                    await msgRef.set({
                         text: '', audio: e.target.result, audioDuration: '0:' + Math.floor(audioChunks.length / 10).toString().padStart(2, '0'),
                         senderId: currentUser.uid, senderName: currentUser.name,
                         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -2715,8 +3094,8 @@ window.toggleVoiceRecord = async () => {
             };
             mediaRecorder.start();
             isRecording = true;
-            document.querySelector('.attach-btn[onclick*="Voice"]') && (document.querySelector('.attach-btn[onclick*="Voice"]').textContent = 'â¹ï¸');
-            alert('Recording... Click ðŸŽ¤ again to stop');
+            document.querySelector('.attach-btn[onclick*="Voice"]') && (document.querySelector('.attach-btn[onclick*="Voice"]').textContent = '⏹️');
+            alert('Recording... Click 🎤 again to stop');
         } catch (e) { alert('Microphone access denied!'); }
     } else {
         mediaRecorder.stop();
@@ -2736,67 +3115,305 @@ document.addEventListener('keypress', (e) => {
 
 window.handleTyping = () => {};
 
-// ==================== CALLS ====================
-window.startAudioCall = () => {
-    if (!currentOtherUser) return;
-    showScreen('audioCallScreen');
-    document.getElementById('callingUserName').textContent = currentOtherUser.name;
-    document.getElementById('callStatus').textContent = 'Calling...';
-    if (currentOtherUser.photo) {
-        document.getElementById('callUserPhoto').src = currentOtherUser.photo;
-        document.getElementById('callUserPhoto').style.display = 'block';
-        document.getElementById('callUserIcon').style.display = 'none';
+// ==================== WEBRTC REAL CALLS ====================
+let localStream = null;
+let peerConnection = null;
+let callId = null;
+let isMuted = false;
+let isCaller = false;
+let callTimerInterval = null;
+let callSeconds = 0;
+let ringInterval = null;
+
+// Ringing sound using Web Audio API
+function startRinging(isIncoming = false) {
+    stopRinging();
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playRing() {
+        if (isIncoming) {
+            // Incoming: classic phone ring
+            [0, 0.4].forEach(delay => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.value = 440;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+                gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + delay + 0.05);
+                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + delay + 0.35);
+                osc.start(ctx.currentTime + delay);
+                osc.stop(ctx.currentTime + delay + 0.4);
+            });
+        } else {
+            // Outgoing: dial tone
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.frequency.value = 425;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.5);
+        }
     }
-    // Log call in Firebase
-    const callRef = push(ref(db, `calls/${currentUser.uid}`));
-    set(callRef, {
-        type: 'audio', with: currentOtherUser.name, withUid: currentOtherUser.uid,
-        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        timestamp: Date.now(), status: 'outgoing'
+    
+    playRing();
+    ringInterval = setInterval(playRing, isIncoming ? 3000 : 2000);
+}
+
+function stopRinging() {
+    if (ringInterval) { clearInterval(ringInterval); ringInterval = null; }
+}
+
+const ICE_SERVERS = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+};
+
+// Listen for incoming calls
+function listenForCalls() {
+    if (!currentUser) return;
+    dbRef(`calls/incoming/${currentUser.uid}`).on('value', async snap => {
+        const call = snap.val();
+        if (!call || call.status !== 'calling') return;
+        // Show incoming call UI
+        callId = call.callId;
+        isCaller = false;
+        document.getElementById('incomingCallerName').textContent = call.callerName;
+        document.getElementById('incomingCallType').textContent = `Incoming ${call.type === 'video' ? 'Video' : 'Audio'} Call...`;
+        showScreen('incomingCallScreen');
+        startRinging(true); // Incoming ring
+        callTimeout = setTimeout(() => rejectCall(), 30000);
     });
-    callTimeout = setTimeout(() => {
-        document.getElementById('callStatus').textContent = 'No answer';
-        setTimeout(() => showScreen('chatScreen'), 2000);
-    }, 15000);
+}
+
+window.startAudioCall = async () => {
+    if (!currentOtherUser) return;
+    await startCall('audio');
+};
+
+window.startVideoCall = async () => {
+    if (!currentOtherUser) return;
+    await startCall('video');
+};
+
+async function startCall(type) {
+    try {
+        isCaller = true;
+        callId = `call_${currentUser.uid}_${Date.now()}`;
+        const constraints = type === 'video' ? { audio: true, video: true } : { audio: true, video: false };
+        localStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+        showScreen('audioCallScreen');
+        document.getElementById('callingUserName').textContent = currentOtherUser.name;
+        document.getElementById('callStatus').textContent = 'Calling...';
+        document.getElementById('callTimer').style.display = 'none';
+        startRinging(false); // Outgoing dial tone
+
+        if (currentOtherUser.photo) {
+            document.getElementById('callUserPhoto').src = currentOtherUser.photo;
+            document.getElementById('callUserPhoto').style.display = 'block';
+            document.getElementById('callUserIcon').style.display = 'none';
+        }
+
+        // Create peer connection
+        peerConnection = new RTCPeerConnection(ICE_SERVERS);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        // Handle remote stream
+        peerConnection.ontrack = (e) => {
+            document.getElementById('remoteAudio').srcObject = e.streams[0];
+        };
+
+        // ICE candidates
+        peerConnection.onicecandidate = (e) => {
+            if (e.candidate) {
+                dbRef(`calls/ice/${callId}/caller`).push(e.candidate.toJSON());
+            }
+        };
+
+        // Create offer
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        // Send call to other user
+        await dbRef(`calls/incoming/${currentOtherUser.uid}`).set({
+            callId, type, status: 'calling',
+            callerUid: currentUser.uid, callerName: currentUser.name,
+            offer: { type: offer.type, sdp: offer.sdp }
+        });
+
+        // Log call
+        dbRef(`calls/${currentUser.uid}`).push().set({
+            type, with: currentOtherUser.name, withUid: currentOtherUser.uid,
+            time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+            timestamp: Date.now(), status: 'outgoing'
+        });
+
+        // Listen for answer
+        dbRef(`calls/answer/${callId}`).on('value', async snap => {
+            const data = snap.val();
+            if (!data) return;
+            if (data.status === 'rejected') {
+                document.getElementById('callStatus').textContent = 'Call declined';
+                stopRinging();
+                setTimeout(() => endCall(), 2000);
+                return;
+            }
+            if (data.answer && peerConnection.signalingState !== 'stable') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+                document.getElementById('callStatus').textContent = 'Connected';
+                stopRinging();
+                startCallTimer();
+            }
+        });
+
+        // Listen for ICE from callee
+        dbRef(`calls/ice/${callId}/callee`).on('child_added', async snap => {
+            const candidate = snap.val();
+            if (candidate && peerConnection) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            }
+        });
+
+        callTimeout = setTimeout(() => {
+            document.getElementById('callStatus').textContent = 'No answer';
+            setTimeout(() => endCall(), 2000);
+        }, 30000);
+
+    } catch (e) {
+        alert('Could not access microphone: ' + e.message);
+    }
+}
+
+window.acceptCall = async () => {
+    if (callTimeout) clearTimeout(callTimeout);
+    stopRinging();
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+
+        // Get call data
+        const snap = await dbRef(`calls/incoming/${currentUser.uid}`).once('value');
+        const callData = snap.val();
+        if (!callData) return;
+
+        showScreen('audioCallScreen');
+        document.getElementById('callingUserName').textContent = callData.callerName;
+        document.getElementById('callStatus').textContent = 'Connected';
+        startCallTimer();
+
+        peerConnection = new RTCPeerConnection(ICE_SERVERS);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        peerConnection.ontrack = (e) => {
+            document.getElementById('remoteAudio').srcObject = e.streams[0];
+        };
+
+        peerConnection.onicecandidate = (e) => {
+            if (e.candidate) {
+                dbRef(`calls/ice/${callId}/callee`).push(e.candidate.toJSON());
+            }
+        };
+
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(callData.offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+
+        await dbRef(`calls/answer/${callId}`).set({
+            status: 'accepted',
+            answer: { type: answer.type, sdp: answer.sdp }
+        });
+
+        // Listen for ICE from caller
+        dbRef(`calls/ice/${callId}/caller`).on('child_added', async snap => {
+            const candidate = snap.val();
+            if (candidate && peerConnection) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            }
+        });
+
+        // Clear incoming call
+        await dbRef(`calls/incoming/${currentUser.uid}`).remove();
+
+    } catch (e) {
+        alert('Error accepting call: ' + e.message);
+    }
+};
+
+window.rejectCall = async () => {
+    if (callTimeout) clearTimeout(callTimeout);
+    stopRinging();
+    if (callId) {
+        await dbRef(`calls/answer/${callId}`).set({ status: 'rejected' });
+        await dbRef(`calls/incoming/${currentUser.uid}`).remove();
+    }
+    showScreen('chatScreen');
 };
 
 window.endCall = () => {
     if (callTimeout) clearTimeout(callTimeout);
-    showScreen('chatScreen');
-};
-
-window.startVideoCall = () => {
-    if (!currentOtherUser) return;
-    showScreen('videoCallScreen');
-    document.getElementById('videoCallingUserName').textContent = currentOtherUser.name;
-    document.getElementById('videoCallStatus').textContent = 'Calling...';
-    if (currentOtherUser.photo) {
-        document.getElementById('videoCallUserPhoto').src = currentOtherUser.photo;
-        document.getElementById('videoCallUserPhoto').style.display = 'block';
-        document.getElementById('videoCallUserIcon').style.display = 'none';
+    stopRinging();
+    stopCallTimer();
+    if (peerConnection) { peerConnection.close(); peerConnection = null; }
+    if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+    if (callId) {
+        dbRef(`calls/incoming/${currentUser.uid}`).remove();
+        dbRef(`calls/answer/${callId}`).remove();
+        dbRef(`calls/ice/${callId}`).remove();
+        callId = null;
     }
-    const callRef = push(ref(db, `calls/${currentUser.uid}`));
-    set(callRef, {
-        type: 'video', with: currentOtherUser.name, withUid: currentOtherUser.uid,
-        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        timestamp: Date.now(), status: 'outgoing'
-    });
-    videoCallTimeout = setTimeout(() => {
-        document.getElementById('videoCallStatus').textContent = 'No answer';
-        setTimeout(() => showScreen('chatScreen'), 2000);
-    }, 15000);
+    showScreen('chatScreen');
 };
 
-window.endVideoCall = () => {
-    if (videoCallTimeout) clearTimeout(videoCallTimeout);
-    showScreen('chatScreen');
+window.endVideoCall = () => endCall();
+
+window.toggleMute = () => {
+    if (!localStream) return;
+    isMuted = !isMuted;
+    localStream.getAudioTracks().forEach(t => t.enabled = !isMuted);
+    document.getElementById('muteBtn').textContent = isMuted ? '🔇' : '🎤';
+    document.getElementById('muteBtn').style.background = isMuted ? 'rgba(255,68,68,0.5)' : 'rgba(255,255,255,0.2)';
+};
+
+window.toggleSpeaker = () => {
+    const audio = document.getElementById('remoteAudio');
+    if (audio) {
+        audio.muted = !audio.muted;
+        document.getElementById('speakerBtn').textContent = audio.muted ? '🔇' : '🔊';
+    }
+};
+
+function startCallTimer() {
+    callSeconds = 0;
+    document.getElementById('callTimer').style.display = 'block';
+    callTimerInterval = setInterval(() => {
+        callSeconds++;
+        const m = Math.floor(callSeconds / 60).toString().padStart(2, '0');
+        const s = (callSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('callTimer').textContent = `${m}:${s}`;
+    }, 1000);
+}
+
+function stopCallTimer() {
+    if (callTimerInterval) { clearInterval(callTimerInterval); callTimerInterval = null; }
+}
+
+// Start listening for calls when logged in
+const _origShowMain = window.showMainScreen;
+window.showMainScreen = function() {
+    _origShowMain();
+    listenForCalls();
 };
 
 // Load Call History
 function loadCallHistory() {
     const callsDiv = document.getElementById('callsList');
     callsDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">Loading...</p>';
-    get(ref(db, `calls/${currentUser.uid}`)).then(snap => {
+    dbRef(`calls/${currentUser.uid}`).once("value").then(snap => {
         callsDiv.innerHTML = '';
         if (!snap.exists()) {
             callsDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No calls yet</p>';
@@ -2809,10 +3426,10 @@ function loadCallHistory() {
             const div = document.createElement('div');
             div.className = 'chat-item';
             div.innerHTML = `
-                <div class="chat-avatar">${call.type === 'video' ? 'ðŸ“¹' : 'ðŸ“ž'}</div>
+                <div class="chat-avatar">${call.type === 'video' ? '📹' : '📞'}</div>
                 <div class="chat-info">
                     <div class="chat-name">${call.with}</div>
-                    <div class="last-message">${call.status === 'outgoing' ? 'â†—ï¸ Outgoing' : 'â†™ï¸ Incoming'} ${call.type} call Â· ${call.time}</div>
+                    <div class="last-message">${call.status === 'outgoing' ? '↗️ Outgoing' : '↙️ Incoming'} ${call.type} call · ${call.time}</div>
                 </div>
             `;
             callsDiv.appendChild(div);
@@ -2839,8 +3456,8 @@ window.previewStatusPhoto = () => {
 window.postStatus = async () => {
     const text = document.getElementById('statusText').value.trim();
     if (!text && !statusPhotoData) return alert('Add text or photo!');
-    const statusRef = push(ref(db, `statuses/${currentUser.uid}`));
-    await set(statusRef, {
+    const statusRef = dbRef(`statuses/${currentUser.uid}`).push();
+    await statusRef.set({
         uid: currentUser.uid, name: currentUser.name, photo: currentUser.photo || '',
         text, image: statusPhotoData || null, timestamp: Date.now(),
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
@@ -2855,31 +3472,55 @@ window.postStatus = async () => {
 function loadStatuses() {
     const statusList = document.getElementById('statusList');
     statusList.innerHTML = '';
-    const cutoff = Date.now() - 24 * 60 * 60 * 1000; // 24 hours
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
 
-    get(ref(db, 'statuses')).then(snap => {
-        if (!snap.exists()) return;
-        snap.forEach(userStatuses => {
-            userStatuses.forEach(statusSnap => {
-                const s = statusSnap.val();
-                if (s.uid === currentUser.uid) return;
-                if (s.timestamp < cutoff) return;
-                if (blockedUsers.includes(s.uid)) return;
-
-                const div = document.createElement('div');
-                div.className = 'chat-item';
-                div.onclick = () => viewStatus(s);
-                div.innerHTML = `
-                    <div class="status-avatar-ring">
-                        ${s.photo ? `<img src="${s.photo}" class="chat-avatar" />` : `<div class="chat-avatar">ðŸ‘¤</div>`}
-                    </div>
-                    <div class="chat-info">
-                        <div class="chat-name">${s.name}</div>
-                        <div class="last-message">${s.time} Â· ${s.text || 'ðŸ“· Photo'}</div>
-                    </div>
-                `;
-                statusList.appendChild(div);
+    // Pehle apne chats dhundo - jinse chat ki hai woh contacts hain
+    dbRef('chats').once("value").then(chatsSnap => {
+        const contactUids = new Set();
+        if (chatsSnap.val()) {
+            chatsSnap.forEach(chatSnap => {
+                const chatId = chatSnap.key;
+                // chatId format: uid1_uid2
+                const parts = chatId.split('_');
+                parts.forEach(uid => {
+                    if (uid !== currentUser.uid) contactUids.add(uid);
+                });
             });
+        }
+
+        // Ab statuses load karo sirf contacts ki
+        dbRef('statuses').once("value").then(snap => {
+            if (!snap.val()) {
+                statusList.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No status updates</p>';
+                return;
+            }
+            let count = 0;
+            snap.forEach(userStatuses => {
+                userStatuses.forEach(statusSnap => {
+                    const s = statusSnap.val();
+                    if (!s) return;
+                    if (s.timestamp < cutoff) return;
+                    if (blockedUsers.includes(s.uid)) return;
+                    // Sirf contacts ya apna status dikhao
+                    if (s.uid !== currentUser.uid && !contactUids.has(s.uid)) return;
+                    count++;
+                    const isMe = s.uid === currentUser.uid;
+                    const div = document.createElement('div');
+                    div.className = 'chat-item';
+                    div.onclick = () => viewStatus(s);
+                    div.innerHTML = `
+                        <div class="status-avatar-ring">
+                            ${s.photo ? `<img src="${s.photo}" class="chat-avatar" />` : `<div class="chat-avatar">👤</div>`}
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-name">${isMe ? 'My Status' : s.name}</div>
+                            <div class="last-message">${s.time} · ${s.text || '📷 Photo'}</div>
+                        </div>
+                    `;
+                    statusList.appendChild(div);
+                });
+            });
+            if (count === 0) statusList.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No status from contacts</p>';
         });
     });
 }
@@ -2903,8 +3544,10 @@ window.showProfile = () => {
     document.getElementById('profileName').textContent = currentUser.name || '';
     document.getElementById('profileEmail').textContent = currentUser.email || '';
     document.getElementById('usernameInput').value = currentUser.username || '';
+    document.getElementById('phoneInput').value = currentUser.phone || '';
     document.getElementById('bioInput').value = currentUser.bio || '';
     document.getElementById('profileUsername').textContent = currentUser.username ? `@${currentUser.username}` : '';
+    document.getElementById('profilePhone').textContent = currentUser.phone ? `📱 ${currentUser.phone}` : '';
     document.getElementById('profileBio').textContent = currentUser.bio || '';
     if (currentUser.photo) {
         document.getElementById('profileImage').src = currentUser.photo;
@@ -2916,10 +3559,13 @@ window.showProfile = () => {
 window.saveProfile = async () => {
     const username = document.getElementById('usernameInput').value.trim();
     const bio = document.getElementById('bioInput').value.trim();
-    await update(ref(db, `users/${currentUser.uid}`), { username, bio });
+    const phone = document.getElementById('phoneInput').value.trim();
+    await dbRef(`users/${currentUser.uid}`).update({ username, bio, phone });
     currentUser.username = username;
     currentUser.bio = bio;
+    currentUser.phone = phone;
     document.getElementById('profileUsername').textContent = username ? `@${username}` : '';
+    document.getElementById('profilePhone').textContent = phone ? `📱 ${phone}` : '';
     document.getElementById('profileBio').textContent = bio;
     alert('Profile saved!');
 };
@@ -2930,7 +3576,7 @@ window.uploadPhoto = () => {
     const reader = new FileReader();
     reader.onload = async (e) => {
         const photoData = e.target.result;
-        await update(ref(db, `users/${currentUser.uid}`), { photo: photoData });
+        await dbRef(`users/${currentUser.uid}`).update({ photo: photoData });
         currentUser.photo = photoData;
         document.getElementById('profileImage').src = photoData;
         document.getElementById('profileImage').style.display = 'block';
@@ -2947,8 +3593,9 @@ window.showOtherUserProfile = () => {
     document.getElementById('otherProfileName').textContent = currentOtherUser.name || '';
     document.getElementById('otherProfileEmail').textContent = currentOtherUser.email || '';
     document.getElementById('otherProfileUsername').textContent = currentOtherUser.username ? `@${currentOtherUser.username}` : '';
+    document.getElementById('otherProfilePhone').textContent = currentOtherUser.phone ? `📱 ${currentOtherUser.phone}` : '';
     document.getElementById('otherProfileBio').textContent = currentOtherUser.bio || '';
-    document.getElementById('otherProfileStatus').textContent = currentOtherUser.online ? 'ðŸŸ¢ Online' : `Last seen: ${getLastSeen(currentOtherUser.lastSeen)}`;
+    document.getElementById('otherProfileStatus').textContent = currentOtherUser.online ? '🟢 Online' : `Last seen: ${getLastSeen(currentOtherUser.lastSeen)}`;
     if (currentOtherUser.photo) {
         document.getElementById('otherProfileImage').src = currentOtherUser.photo;
         document.getElementById('otherProfileImage').style.display = 'block';
@@ -2993,13 +3640,13 @@ window.showBlockedUsers = () => {
         return;
     }
     blockedUsers.forEach(uid => {
-        get(ref(db, `users/${uid}`)).then(snap => {
+        dbRef(`users/${uid}`).once("value").then(snap => {
             const user = snap.val();
             if (!user) return;
             const div = document.createElement('div');
             div.className = 'chat-item';
             div.innerHTML = `
-                <div class="chat-avatar">ðŸ‘¤</div>
+                <div class="chat-avatar">👤</div>
                 <div class="chat-info"><div class="chat-name">${user.name}</div></div>
                 <button onclick="unblockUser('${uid}')" style="padding:5px 10px;font-size:12px;width:auto;background:#ff4444;">Unblock</button>
             `;
@@ -3086,7 +3733,7 @@ window.unlockApp = () => {
     const savedPin = localStorage.getItem('appPin');
     if (pin === savedPin) {
         showScreen('loginScreen');
-        onAuthStateChanged(auth, (user) => { if (user) showMainScreen(); });
+        auth.onAuthStateChanged( (user) => { if (user) showMainScreen(); });
     } else {
         alert('Wrong PIN!');
     }
@@ -3097,7 +3744,7 @@ window.deleteAccount = async () => {
     if (!confirm('Are you sure? This will permanently delete your account!')) return;
     if (!confirm('This cannot be undone. Delete account?')) return;
     try {
-        await remove(ref(db, `users/${currentUser.uid}`));
+        await dbRef(`users/${currentUser.uid}`).remove();
         await auth.currentUser.delete();
         alert('Account deleted.');
     } catch (e) { alert('Error: ' + e.message); }
@@ -3106,37 +3753,75 @@ window.deleteAccount = async () => {
 // ==================== GROUP CHAT ====================
 window.showNewGroup = () => {
     showScreen('createGroupScreen');
-    const membersList = document.getElementById('groupMembersList');
-    membersList.innerHTML = '';
     selectedGroupMembers = [];
-    get(ref(db, 'users')).then(snap => {
+    document.getElementById('groupSearchInput').value = '';
+    document.getElementById('groupSearchResults').innerHTML = '';
+    document.getElementById('groupSelectedMembers').innerHTML = '<p style="color:#999;font-size:13px;">No members added yet</p>';
+};
+
+window.searchGroupMembers = () => {
+    const term = document.getElementById('groupSearchInput').value.trim().toLowerCase();
+    const results = document.getElementById('groupSearchResults');
+    if (!term) { results.innerHTML = ''; return; }
+
+    results.innerHTML = '<p style="padding:10px;color:#999;font-size:13px;">Searching...</p>';
+    dbRef('users').once('value').then(snap => {
+        results.innerHTML = '';
+        let found = 0;
         snap.forEach(child => {
             const user = child.val();
             if (user.uid === currentUser.uid) return;
+            if (selectedGroupMembers.includes(user.uid)) return;
+            const username = (user.username || '').toLowerCase();
+            const email = (user.email || '').toLowerCase();
+            const name = (user.name || '').toLowerCase();
+            if (!username.includes(term) && !email.includes(term) && !name.includes(term)) return;
+            found++;
             const div = document.createElement('div');
             div.className = 'chat-item';
             div.style.cursor = 'pointer';
-            div.onclick = () => toggleGroupMember(user.uid, div);
+            div.onclick = () => addGroupMember(user);
             div.innerHTML = `
-                <div class="chat-avatar">${user.photo ? `<img src="${user.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />` : 'ðŸ‘¤'}</div>
-                <div class="chat-info"><div class="chat-name">${user.name}</div></div>
-                <span class="member-check" id="check_${user.uid}">â—‹</span>
+                ${makeAvatarHtml(user, 40)}
+                <div class="chat-info">
+                    <div class="chat-name">${user.username ? '@'+user.username : user.name}</div>
+                    <div class="last-message" style="font-size:12px;">${user.email}</div>
+                </div>
+                <span style="color:#667eea;font-size:13px;font-weight:600;">+ Add</span>
             `;
-            membersList.appendChild(div);
+            results.appendChild(div);
         });
+        if (found === 0) results.innerHTML = '<p style="padding:10px;color:#999;font-size:13px;">No user found</p>';
     });
 };
 
-window.toggleGroupMember = (uid, div) => {
-    const check = document.getElementById(`check_${uid}`);
-    if (selectedGroupMembers.includes(uid)) {
-        selectedGroupMembers = selectedGroupMembers.filter(id => id !== uid);
-        check.textContent = 'â—‹';
-        div.style.background = '';
-    } else {
-        selectedGroupMembers.push(uid);
-        check.textContent = 'âœ“';
-        div.style.background = '#e8f5e9';
+window.addGroupMember = (user) => {
+    if (selectedGroupMembers.includes(user.uid)) return;
+    selectedGroupMembers.push(user.uid);
+
+    // Update selected members display
+    const container = document.getElementById('groupSelectedMembers');
+    const chip = document.createElement('div');
+    chip.id = `chip_${user.uid}`;
+    chip.style.cssText = 'display:flex;align-items:center;gap:6px;background:#667eea;color:white;padding:6px 12px;border-radius:20px;font-size:13px;';
+    chip.innerHTML = `${user.username ? '@'+user.username : user.name} <span onclick="removeGroupMember('${user.uid}')" style="cursor:pointer;font-size:16px;line-height:1;">×</span>`;
+    
+    // Remove "no members" text
+    if (container.querySelector('p')) container.innerHTML = '';
+    container.appendChild(chip);
+
+    // Clear search
+    document.getElementById('groupSearchInput').value = '';
+    document.getElementById('groupSearchResults').innerHTML = '';
+};
+
+window.removeGroupMember = (uid) => {
+    selectedGroupMembers = selectedGroupMembers.filter(id => id !== uid);
+    const chip = document.getElementById(`chip_${uid}`);
+    if (chip) chip.remove();
+    const container = document.getElementById('groupSelectedMembers');
+    if (container.children.length === 0) {
+        container.innerHTML = '<p style="color:#999;font-size:13px;">No members added yet</p>';
     }
 };
 
@@ -3158,7 +3843,7 @@ window.createGroup = async () => {
     const groupId = 'group_' + Date.now();
     const members = { [currentUser.uid]: true };
     selectedGroupMembers.forEach(uid => members[uid] = true);
-    await set(ref(db, `groups/${groupId}`), {
+    await set(dbRef(`groups/${groupId}`), {
         name, description: document.getElementById('groupDescription').value.trim(),
         createdBy: currentUser.uid, createdAt: Date.now(), members
     });
@@ -3181,7 +3866,7 @@ window.showStarredMessages = () => {
         const div = document.createElement('div');
         div.className = 'message other-message';
         div.style.margin = '10px';
-        div.innerHTML = `<div class="message-text">â­ ${msg.text}</div><div class="message-time">${msg.time}</div>`;
+        div.innerHTML = `<div class="message-text">⭐ ${msg.text}</div><div class="message-time">${msg.time}</div>`;
         list.appendChild(div);
     });
 };
@@ -3235,9 +3920,9 @@ window.attachFile = (type) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
         const isImage = type === 'photo';
-        const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-        await set(msgRef, {
-            text: isImage ? '' : `ðŸ“Ž ${file.name}`,
+        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        await msgRef.set({
+            text: isImage ? '' : `📎 ${file.name}`,
             image: isImage ? e.target.result : null,
             senderId: currentUser.uid, senderName: currentUser.name,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -3253,9 +3938,9 @@ window.shareLocation = () => {
     if (!navigator.geolocation) return alert('Geolocation not supported');
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude, longitude } = pos.coords;
-        const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-        await set(msgRef, {
-            text: `ðŸ“ Location: https://maps.google.com/?q=${latitude},${longitude}`,
+        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        await msgRef.set({
+            text: `📍 Location: https://maps.google.com/?q=${latitude},${longitude}`,
             image: null, senderId: currentUser.uid, senderName: currentUser.name,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
             timestamp: Date.now(), deleted: false, read: false
@@ -3268,9 +3953,9 @@ window.shareContact = () => {
     const name = prompt('Contact name:');
     const phone = prompt('Contact phone:');
     if (!name || !phone) return;
-    const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-    set(msgRef, {
-        text: `ðŸ‘¤ Contact: ${name} - ${phone}`,
+    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+    msgRef.set({
+        text: `👤 Contact: ${name} - ${phone}`,
         image: null, senderId: currentUser.uid, senderName: currentUser.name,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         timestamp: Date.now(), deleted: false, read: false
@@ -3278,7 +3963,7 @@ window.shareContact = () => {
 };
 
 // ==================== EMOJI PICKER ====================
-const EMOJIS = ['ðŸ˜€','ðŸ˜‚','ðŸ˜','ðŸ¥°','ðŸ˜Ž','ðŸ˜­','ðŸ˜¡','ðŸ¤”','ðŸ‘','ðŸ‘Ž','â¤ï¸','ðŸ”¥','ðŸŽ‰','âœ…','ðŸ’¯','ðŸ™','ðŸ˜Š','ðŸ¤£','ðŸ˜…','ðŸ˜¢','ðŸ˜¤','ðŸ¥³','ðŸ˜´','ðŸ¤¯','ðŸ‘','ðŸ’ª','ðŸŽ¶','ðŸŒŸ','ðŸ’¬','ðŸ“±'];
+const EMOJIS = ['😀','😂','😍','🥰','😎','😭','😡','🤔','👍','👎','❤️','🔥','🎉','✅','💯','🙏','😊','🤣','😅','😢','😤','🥳','😴','🤯','👏','💪','🎶','🌟','💬','📱'];
 
 window.toggleEmojiPicker = () => {
     const picker = document.getElementById('emojiPicker');
@@ -3335,7 +4020,7 @@ window.showMediaGallery = () => {
     showScreen('mediaGalleryScreen');
     const grid = document.getElementById('mediaGalleryGrid');
     grid.innerHTML = '<p style="padding:20px;text-align:center;color:#999;grid-column:1/-1;">Loading...</p>';
-    get(ref(db, `chats/${currentChatId}/messages`)).then(snap => {
+    dbRef(`chats/${currentChatId}/messages`).once("value").then(snap => {
         grid.innerHTML = '';
         let count = 0;
         snap.forEach(child => {
@@ -3382,7 +4067,7 @@ window.showArchive = () => {
         const div = document.createElement('div');
         div.className = 'chat-item';
         div.innerHTML = `
-            <div class="chat-avatar">${chat.photo ? `<img src="${chat.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />` : 'ðŸ‘¤'}</div>
+            <div class="chat-avatar">${chat.photo ? `<img src="${chat.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />` : '👤'}</div>
             <div class="chat-info"><div class="chat-name">${chat.name}</div><div class="last-message">Archived</div></div>
             <button onclick="unarchiveChat(${i})" style="width:auto;padding:5px 10px;font-size:12px;background:#ff4444;">Unarchive</button>
         `;
@@ -3412,7 +4097,7 @@ window.showPinnedMessages = () => {
         const div = document.createElement('div');
         div.className = 'message other-message';
         div.style.margin = '10px';
-        div.innerHTML = `<div class="message-text">ðŸ“Œ ${msg.text}</div><div class="message-time">${msg.time}</div>`;
+        div.innerHTML = `<div class="message-text">📌 ${msg.text}</div><div class="message-time">${msg.time}</div>`;
         list.appendChild(div);
     });
 };
@@ -3433,7 +4118,7 @@ window.showExportChat = () => {
 };
 
 window.exportChatTxt = () => {
-    get(ref(db, `chats/${currentChatId}/messages`)).then(snap => {
+    dbRef(`chats/${currentChatId}/messages`).once("value").then(snap => {
         let text = `HeyApp Chat Export - ${currentOtherUser.name}\n${'='.repeat(40)}\n\n`;
         snap.forEach(child => {
             const msg = child.val();
@@ -3451,7 +4136,7 @@ window.exportChatTxt = () => {
 };
 
 window.exportChatJSON = () => {
-    get(ref(db, `chats/${currentChatId}/messages`)).then(snap => {
+    dbRef(`chats/${currentChatId}/messages`).once("value").then(snap => {
         const messages = [];
         snap.forEach(child => messages.push(child.val()));
         const blob = new Blob([JSON.stringify(messages, null, 2)], { type: 'application/json' });
@@ -3476,7 +4161,7 @@ window.doTranslate = () => {
     const langNames = { hi: 'Hindi', en: 'English', ur: 'Urdu', ar: 'Arabic', fr: 'French', es: 'Spanish' };
     // Use Google Translate URL (opens in new tab as fallback)
     const url = `https://translate.google.com/?sl=auto&tl=${lang}&text=${encodeURIComponent(translateMsgText)}&op=translate`;
-    document.getElementById('translateResult').innerHTML = `<a href="${url}" target="_blank" style="color:#667eea;">Open in Google Translate (${langNames[lang]}) â†’</a>`;
+    document.getElementById('translateResult').innerHTML = `<a href="${url}" target="_blank" style="color:#667eea;">Open in Google Translate (${langNames[lang]}) →</a>`;
 };
 
 window.closeTranslateModal = () => document.getElementById('translateModal').classList.add('hidden');
@@ -3501,9 +4186,9 @@ window.scheduleMessage = () => {
     closeScheduleModal();
     alert(`Message scheduled! Will send in ${Math.round(delay / 60000)} minutes.`);
     setTimeout(async () => {
-        const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-        await set(msgRef, {
-            text: `â° ${text}`, image: null, senderId: currentUser.uid, senderName: currentUser.name,
+        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        await msgRef.set({
+            text: `⏰ ${text}`, image: null, senderId: currentUser.uid, senderName: currentUser.name,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
             timestamp: Date.now(), deleted: false, read: false
         });
@@ -3525,9 +4210,9 @@ window.sendPoll = async () => {
     if (document.getElementById('pollOpt3').value.trim()) options.push(document.getElementById('pollOpt3').value.trim());
     if (document.getElementById('pollOpt4').value.trim()) options.push(document.getElementById('pollOpt4').value.trim());
 
-    const pollText = `ðŸ“Š *${question}*\n${options.map((o, i) => `${['1ï¸âƒ£','2ï¸âƒ£','3ï¸âƒ£','4ï¸âƒ£'][i]} ${o}`).join('\n')}\n\nReply with option number to vote!`;
-    const msgRef = push(ref(db, `chats/${currentChatId}/messages`));
-    await set(msgRef, {
+    const pollText = `📊 *${question}*\n${options.map((o, i) => `${['1️⃣','2️⃣','3️⃣','4️⃣'][i]} ${o}`).join('\n')}\n\nReply with option number to vote!`;
+    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+    await msgRef.set({
         text: pollText, image: null, senderId: currentUser.uid, senderName: currentUser.name,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         timestamp: Date.now(), deleted: false, read: false, isPoll: true
@@ -3562,7 +4247,7 @@ window.showQRCode = () => {
     // Simple QR visual using text
     qrDiv.innerHTML = `
         <div style="text-align:center;">
-            <div style="font-size:60px;margin-bottom:10px;">ðŸ“±</div>
+            <div style="font-size:60px;margin-bottom:10px;">📱</div>
             <div style="font-size:11px;word-break:break-all;color:#667eea;">${currentUser.name}</div>
             <div style="font-size:10px;color:#999;margin-top:5px;">ID: ${currentUser.uid.slice(0,8)}...</div>
         </div>
@@ -3581,7 +4266,7 @@ window.showLanguageSettings = () => {
     showScreen('languageScreen');
     const lang = localStorage.getItem('appLanguage') || 'en';
     ['en','hi','ur'].forEach(l => {
-        document.getElementById(`lang_${l}`).textContent = l === lang ? 'âœ“' : '';
+        document.getElementById(`lang_${l}`).textContent = l === lang ? '✓' : '';
     });
 };
 
@@ -3590,7 +4275,7 @@ window.setLanguage = (lang) => {
     const names = { en: 'English', hi: 'Hindi', ur: 'Urdu' };
     document.getElementById('currentLang').textContent = names[lang];
     ['en','hi','ur'].forEach(l => {
-        document.getElementById(`lang_${l}`).textContent = l === lang ? 'âœ“' : '';
+        document.getElementById(`lang_${l}`).textContent = l === lang ? '✓' : '';
     });
     alert(`Language set to ${names[lang]}`);
 };
@@ -3608,7 +4293,7 @@ window.showLoginHistory = () => {
     list.innerHTML = history.reverse().map(h => `
         <div class="settings-item" style="flex-direction:column;align-items:flex-start;">
             <span style="font-weight:600;">${h.device || 'Web Browser'}</span>
-            <span style="font-size:12px;color:#999;">${h.time} Â· ${h.ip || 'Unknown IP'}</span>
+            <span style="font-size:12px;color:#999;">${h.time} · ${h.ip || 'Unknown IP'}</span>
         </div>
     `).join('');
 };
@@ -3618,7 +4303,7 @@ function logLoginHistory() {
     const history = JSON.parse(localStorage.getItem('loginHistory') || '[]');
     history.push({
         time: new Date().toLocaleString(),
-        device: navigator.userAgent.includes('Mobile') ? 'ðŸ“± Mobile' : 'ðŸ’» Desktop',
+        device: navigator.userAgent.includes('Mobile') ? '📱 Mobile' : '💻 Desktop',
         ip: 'Hidden for privacy'
     });
     if (history.length > 10) history.shift();
@@ -3690,7 +4375,7 @@ window.setBirthdayStatus = () => {
     const today = new Date();
     const month = today.getMonth() + 1;
     const day = today.getDate();
-    update(ref(db, `users/${currentUser.uid}`), { birthday: `${month}/${day}` });
+    dbRef(`users/${currentUser.uid}`).update({ birthday: `${month}/${day}` });
     alert('Birthday set!');
 };
 
@@ -3704,19 +4389,19 @@ function renderMessage(msg) {
     div.className = `message ${isMine ? 'my-message' : 'other-message'}`;
     div.dataset.msgId = msg.id;
 
-    let replyHtml = msg.replyTo ? `<div class="reply-preview-msg">â†©ï¸ ${msg.replyTo.text}</div>` : '';
+    let replyHtml = msg.replyTo ? `<div class="reply-preview-msg">↩️ ${msg.replyTo.text}</div>` : '';
     let contentHtml = '';
 
     if (msg.image) contentHtml += `<img src="${msg.image}" class="message-image" onclick="openImageModal('${msg.image}')" />`;
     if (msg.audio) contentHtml += `
         <div class="voice-message">
-            <button class="voice-play-btn" onclick="playAudio('${msg.audio}')">â–¶ 1x</button>
+            <button class="voice-play-btn" onclick="playAudio('${msg.audio}')">▶ 1x</button>
             <button class="voice-play-btn" onclick="playAudioSpeed('${msg.audio}', 1.5)" style="font-size:11px;">1.5x</button>
             <button class="voice-play-btn" onclick="playAudioSpeed('${msg.audio}', 2)" style="font-size:11px;">2x</button>
             <div class="voice-waveform"></div>
             <span class="voice-duration">${msg.audioDuration || '0:00'}</span>
         </div>`;
-    if (msg.deleted) contentHtml += `<div class="message-text"><i>ðŸš« This message was deleted</i></div>`;
+    if (msg.deleted) contentHtml += `<div class="message-text"><i>🚫 This message was deleted</i></div>`;
     else if (msg.text) contentHtml += `<div class="message-text">${msg.text}</div>`;
 
     let reactionsHtml = '';
@@ -3727,14 +4412,14 @@ function renderMessage(msg) {
     }
 
     const safeText = (msg.text || 'Photo').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-    const deleteBtn = isMine && !msg.deleted ? `<button class="msg-reply-btn" onclick="deleteMessage('${msg.id}')">ðŸ—‘ï¸</button>` : '';
-    const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}', '${safeText}')">â†©ï¸</button>` : '';
-    const forwardBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="forwardMessage('${msg.id}', '${safeText}')">â†ªï¸</button>` : '';
-    const reactBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="showReactionPicker('${msg.id}', event)">ðŸ˜Š</button>` : '';
-    const translateBtn = msg.text && !msg.deleted ? `<button class="msg-reply-btn" onclick="showTranslate('${safeText}')">ðŸŒ</button>` : '';
-    const pinBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="pinMessage('${msg.id}', '${safeText}', '${msg.time}')">ðŸ“Œ</button>` : '';
-    const starBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="starMessage('${msg.id}', '${safeText}', '${msg.time}')">â­</button>` : '';
-    const readReceipt = isMine ? (msg.read ? ' âœ“âœ“' : ' âœ“') : '';
+    const deleteBtn = isMine && !msg.deleted ? `<button class="msg-reply-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>` : '';
+    const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}', '${safeText}')">↩️</button>` : '';
+    const forwardBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="forwardMessage('${msg.id}', '${safeText}')">↪️</button>` : '';
+    const reactBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="showReactionPicker('${msg.id}', event)">😊</button>` : '';
+    const translateBtn = msg.text && !msg.deleted ? `<button class="msg-reply-btn" onclick="showTranslate('${safeText}')">🌐</button>` : '';
+    const pinBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="pinMessage('${msg.id}', '${safeText}', '${msg.time}')">📌</button>` : '';
+    const starBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="starMessage('${msg.id}', '${safeText}', '${msg.time}')">⭐</button>` : '';
+    const readReceipt = isMine ? (msg.read ? ' ✓✓' : ' ✓') : '';
 
     div.innerHTML = `
         ${replyHtml}
@@ -3767,8 +4452,391 @@ function showMainScreen() {
 }
 window.showMainScreen = showMainScreen;
 
+// ==================== SPLASH SCREEN ====================
+function hideSplash() {
+    const splash = document.getElementById('splashScreen');
+    if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => splash.style.display = 'none', 500);
+    }
+}
+setTimeout(hideSplash, 2500);
+
+// ==================== PUSH NOTIFICATIONS ====================
+function requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+}
+requestNotificationPermission();
+
+function showPushNotification(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        const n = new Notification(title, {
+            body, icon: 'https://img.icons8.com/color/48/chat.png',
+            badge: 'https://img.icons8.com/color/48/chat.png'
+        });
+        setTimeout(() => n.close(), 4000);
+        n.onclick = () => window.focus();
+    }
+}
+
+// ==================== GRADIENT AVATARS ====================
+function getAvatarGradient(name) {
+    const gradients = ['avatar-gradient-1','avatar-gradient-2','avatar-gradient-3','avatar-gradient-4','avatar-gradient-5','avatar-gradient-6'];
+    const index = (name || '').charCodeAt(0) % gradients.length;
+    return gradients[index];
+}
+
+function getInitials(name) {
+    if (!name) return '?';
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+// ==================== LINK PREVIEW ====================
+function detectLinks(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.match(urlRegex);
+}
+
+function renderLinkPreview(text) {
+    const links = detectLinks(text);
+    if (!links) return '';
+    const url = links[0];
+    const domain = url.replace(/https?:\/\//, '').split('/')[0];
+    return `<div class="link-preview" onclick="window.open('${url}','_blank')">
+        <div class="link-preview-title">🔗 ${domain}</div>
+        <div class="link-preview-url">${url.length > 40 ? url.slice(0,40)+'...' : url}</div>
+    </div>`;
+}
+
+// ==================== ONLINE DOT ====================
+function makeAvatarHtml(user, size = 50) {
+    const gradient = getAvatarGradient(user.name);
+    const initials = getInitials(user.name);
+    const onlineDot = user.online ? '<div class="online-dot"></div>' : '';
+    if (user.photo) {
+        return `<div style="position:relative;width:${size}px;height:${size}px;flex-shrink:0;">
+            <img src="${user.photo}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,0.15);" />
+            ${onlineDot}
+        </div>`;
+    }
+    return `<div style="position:relative;width:${size}px;height:${size}px;flex-shrink:0;">
+        <div class="chat-avatar ${gradient}" style="width:${size}px;height:${size}px;font-size:${size*0.35}px;color:white;font-weight:700;">${initials}</div>
+        ${onlineDot}
+    </div>`;
+}
+
+// ==================== UNREAD BADGE ====================
+const unreadCounts = {};
+function updateUnreadBadge(chatId, count) {
+    unreadCounts[chatId] = count;
+}
+
+// ==================== REPORT USER ====================
+window.reportUser = () => {
+    if (!currentOtherUser) return;
+    if (confirm(`Report ${currentOtherUser.name} for inappropriate behavior?`)) {
+        db.ref(`reports/${currentOtherUser.uid}`).push({
+            reportedBy: currentUser.uid,
+            reportedUser: currentOtherUser.uid,
+            timestamp: Date.now()
+        });
+        alert('User reported. We will review this.');
+    }
+    document.getElementById('chatMenu').classList.add('hidden');
+};
+
+// ==================== MESSAGE COPY ====================
+window.copyMessage = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+        const toast = document.createElement('div');
+        toast.textContent = '✓ Copied!';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:8px 20px;border-radius:20px;font-size:14px;z-index:9999;animation:fadeIn 0.3s ease';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    });
+};
+
+// ==================== OVERRIDE loadUsers with premium UI ====================
+function loadUsers(searchTerm = '') {
+    const chatListDiv = document.getElementById('chatList');
+    if (!searchTerm) {
+        chatListDiv.innerHTML = `<div style="padding:30px;text-align:center;">
+            <div style="font-size:50px;margin-bottom:15px;">🔍</div>
+            <p style="color:#999;font-size:15px;">Search by email to find users</p>
+            <p style="color:#ccc;font-size:13px;margin-top:5px;">Type exact email address</p>
+        </div>`;
+        return;
+    }
+    chatListDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">Searching...</p>';
+    db.ref('users').once('value').then((snapshot) => {
+        chatListDiv.innerHTML = '';
+        let found = 0;
+        snapshot.forEach((child) => {
+            const user = child.val();
+            if (user.uid === currentUser.uid) return;
+            if (blockedUsers.includes(user.uid)) return;
+            const name = (user.name || '').toLowerCase();
+            const email = (user.email || '').toLowerCase();
+            const phone = (user.phone || '').toLowerCase();
+            if (searchTerm && !name.includes(searchTerm) && !email.includes(searchTerm) && !phone.includes(searchTerm)) return;
+            found++;
+            const div = document.createElement('div');
+            div.className = 'chat-item';
+            div.onclick = () => openChat(user);
+            const statusColor = user.online ? 'color:#25D366;font-weight:600' : 'color:#999';
+            const statusText = user.online ? '🟢 Online' : getLastSeen(user.lastSeen);
+            div.innerHTML = `
+                ${makeAvatarHtml(user)}
+                <div class="chat-info">
+                    <div class="chat-name">${user.name}</div>
+                    <div class="last-message" style="${statusColor};font-size:12px;">${statusText}</div>
+                </div>
+            `;
+            chatListDiv.appendChild(div);
+        });
+        if (found === 0) chatListDiv.innerHTML = `<div style="padding:30px;text-align:center;">
+            <div style="font-size:50px;margin-bottom:15px;">😕</div>
+            <p style="color:#999;">No user found with this email</p>
+        </div>`;
+    });
+}
+window.loadUsers = loadUsers;
+
+// ==================== OVERRIDE renderMessage with premium UI ====================
+function renderMessage(msg) {
+    const messagesDiv = document.getElementById('messages');
+    const isMine = msg.senderId === currentUser.uid;
+    const div = document.createElement('div');
+    div.className = `message ${isMine ? 'my-message' : 'other-message'}`;
+    div.dataset.msgId = msg.id;
+
+    let replyHtml = msg.replyTo ? `<div class="reply-preview-msg">↩️ ${msg.replyTo.text}</div>` : '';
+    let contentHtml = '';
+
+    if (msg.image) contentHtml += `<img src="${msg.image}" class="message-image" onclick="openImageModal('${msg.image}')" />`;
+    if (msg.audio) contentHtml += `
+        <div class="voice-message">
+            <button class="voice-play-btn" onclick="playAudio('${msg.audio}')">▶ 1x</button>
+            <button class="voice-play-btn" onclick="playAudioSpeed('${msg.audio}',1.5)">1.5x</button>
+            <button class="voice-play-btn" onclick="playAudioSpeed('${msg.audio}',2)">2x</button>
+            <div class="voice-waveform"></div>
+            <span class="voice-duration">${msg.audioDuration || '0:00'}</span>
+        </div>`;
+    if (msg.deleted) {
+        contentHtml += `<div class="message-text" style="opacity:0.6;font-style:italic;">🚫 This message was deleted</div>`;
+    } else if (msg.text) {
+        const links = detectLinks(msg.text);
+        contentHtml += `<div class="message-text">${msg.text}</div>`;
+        if (links) contentHtml += renderLinkPreview(msg.text);
+    }
+
+    let reactionsHtml = '';
+    if (msg.reactions) {
+        const rc = {};
+        Object.values(msg.reactions).forEach(r => { rc[r] = (rc[r]||0)+1; });
+        reactionsHtml = `<div class="message-reactions">${Object.entries(rc).map(([r,c])=>`<span class="reaction-badge">${r} ${c}</span>`).join('')}</div>`;
+    }
+
+    const safeText = (msg.text||'Photo').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    const deleteBtn = isMine && !msg.deleted ? `<button class="msg-reply-btn" onclick="deleteMessage('${msg.id}')" title="Delete">🗑️</button>` : '';
+    const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}','${safeText}')" title="Reply">↩️</button>` : '';
+    const forwardBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="forwardMessage('${msg.id}','${safeText}')" title="Forward">↪️</button>` : '';
+    const reactBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="showReactionPicker('${msg.id}',event)" title="React">😊</button>` : '';
+    const copyBtn = msg.text && !msg.deleted ? `<button class="msg-reply-btn" onclick="copyMessage('${safeText}')" title="Copy">📋</button>` : '';
+    const translateBtn = msg.text && !msg.deleted ? `<button class="msg-reply-btn" onclick="showTranslate('${safeText}')" title="Translate">🌐</button>` : '';
+    const pinBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="pinMessage('${msg.id}','${safeText}','${msg.time}')" title="Pin">📌</button>` : '';
+    const starBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="starMessage('${msg.id}','${safeText}','${msg.time}')" title="Star">⭐</button>` : '';
+    const readReceipt = isMine ? (msg.read ? ' <span class="seen-time">✓✓</span>' : ' <span style="opacity:0.6">✓</span>') : '';
+
+    div.innerHTML = `
+        ${replyHtml}${contentHtml}${reactionsHtml}
+        <div class="message-footer">
+            <span class="message-time">${msg.time||''}${readReceipt}</span>
+            <div class="message-actions">${reactBtn}${replyBtn}${forwardBtn}${copyBtn}${translateBtn}${pinBtn}${starBtn}${deleteBtn}</div>
+        </div>`;
+    messagesDiv.appendChild(div);
+}
+window.renderMessage = renderMessage;
+
+// Show push notification on new message
+const _origPlayNotif = playNotificationSound;
+function playNotificationSound() {
+    _origPlayNotif();
+    if (currentOtherUser) {
+        showPushNotification(`New message from ${currentOtherUser.name}`, 'Tap to view');
+    }
+}
+
+// ==================== RECENT CHATS ====================
+function loadRecentChats() {
+    const recentDiv = document.getElementById('recentChatsList');
+    if (!recentDiv) return;
+    recentDiv.innerHTML = '';
+
+    dbRef('chats').once('value').then(snap => {
+        if (!snap.val()) return;
+        const myChats = [];
+        snap.forEach(chatSnap => {
+            const chatId = chatSnap.key;
+            // Check if current user is part of this chat
+            if (!chatId.includes(currentUser.uid)) return;
+            const msgs = chatSnap.val()?.messages;
+            if (!msgs) return;
+            // Get last message
+            const msgKeys = Object.keys(msgs);
+            const lastMsg = msgs[msgKeys[msgKeys.length - 1]];
+            // Get other user uid
+            const otherUid = chatId.replace(currentUser.uid, '').replace('_', '');
+            myChats.push({ chatId, lastMsg, otherUid, timestamp: lastMsg.timestamp || 0 });
+        });
+
+        // Sort by latest
+        myChats.sort((a, b) => b.timestamp - a.timestamp);
+
+        if (myChats.length === 0) {
+            recentDiv.innerHTML = '<p style="padding:15px 20px;color:#999;font-size:13px;">No recent chats</p>';
+            return;
+        }
+
+        // Add section title
+        const title = document.createElement('div');
+        title.className = 'section-title';
+        title.textContent = 'Recent Chats';
+        recentDiv.appendChild(title);
+
+        // Load each user's info
+        myChats.forEach(chat => {
+            dbRef(`users/${chat.otherUid}`).once('value').then(userSnap => {
+                const user = userSnap.val();
+                if (!user) return;
+
+                const div = document.createElement('div');
+                div.className = 'chat-item';
+                div.onclick = () => openChat(user);
+
+                const lastText = chat.lastMsg.deleted ? '🚫 Deleted message' :
+                    chat.lastMsg.image ? '📷 Photo' :
+                    chat.lastMsg.audio ? '🎤 Voice message' :
+                    (chat.lastMsg.text || '').slice(0, 40);
+
+                const isMine = chat.lastMsg.senderId === currentUser.uid;
+                const time = chat.lastMsg.time || '';
+
+                div.innerHTML = `
+                    ${makeAvatarHtml(user, 50)}
+                    <div class="chat-info" style="flex:1;min-width:0;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="chat-name">${user.name}</div>
+                            <div style="font-size:11px;color:#999;">${time}</div>
+                        </div>
+                        <div class="last-message" style="font-size:13px;">
+                            ${isMine ? '<span style="color:#667eea;">You: </span>' : ''}${lastText}
+                        </div>
+                    </div>
+                `;
+                recentDiv.appendChild(div);
+            });
+        });
+    });
+}
+
+window.loadRecentChats = loadRecentChats;
+const AI_API_KEY = 'AIzaSyB7j7S0l-QVw7Cj-WPz69XRFVbH9omdt2c'; // Will use Gemini
+let aiHistory = [];
+
+// PWA Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+window.showAIChat = () => {
+    showScreen('aiChatScreen');
+    document.getElementById('aiInput').focus();
+};
+
+window.clearAIChat = () => {
+    aiHistory = [];
+    document.getElementById('aiMessages').innerHTML = `
+        <div class="ai-msg ai-bot-msg">
+            <div class="ai-avatar">🤖</div>
+            <div class="ai-bubble">Chat cleared! How can I help you? 😊</div>
+        </div>`;
+};
+
+window.sendAIMessage = async () => {
+    const input = document.getElementById('aiInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    const messagesDiv = document.getElementById('aiMessages');
+
+    // Add user message
+    messagesDiv.innerHTML += `
+        <div class="ai-msg ai-user-msg">
+            <div class="ai-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7);">👤</div>
+            <div class="ai-bubble">${text}</div>
+        </div>`;
+
+    // Add typing indicator
+    const typingId = 'typing_' + Date.now();
+    messagesDiv.innerHTML += `
+        <div class="ai-msg ai-bot-msg" id="${typingId}">
+            <div class="ai-avatar">🤖</div>
+            <div class="ai-typing"><span></span><span></span><span></span></div>
+        </div>`;
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    // Add to history
+    aiHistory.push({ role: 'user', parts: [{ text }] });
+
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDJThGbsLMWvAX3jG5LMr2gMo3S8vsrR4I`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [
+                        { role: 'user', parts: [{ text: `You are HeyAI, a friendly assistant in HeyApp. User's name is ${currentUser?.name || 'there'}. Be helpful and concise.` }] },
+                        { role: 'model', parts: [{ text: 'Hi! I am HeyAI. How can I help you?' }] },
+                        ...aiHistory
+                    ],
+                    generationConfig: { maxOutputTokens: 500, temperature: 0.7 }
+                })
+            }
+        );
+
+        const data = await response.json();
+        console.log('AI Response:', JSON.stringify(data));
+        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 
+                      data?.error?.message || 
+                      'Sorry, I could not understand. Please try again.';
+
+        // Remove typing indicator
+        document.getElementById(typingId)?.remove();
+
+        // Add AI response
+        aiHistory.push({ role: 'model', parts: [{ text: reply }] });
+        messagesDiv.innerHTML += `
+            <div class="ai-msg ai-bot-msg">
+                <div class="ai-avatar">🤖</div>
+                <div class="ai-bubble">${reply}</div>
+            </div>`;
+
+    } catch (e) {
+        document.getElementById(typingId)?.remove();
+        messagesDiv.innerHTML += `
+            <div class="ai-msg ai-bot-msg">
+                <div class="ai-avatar">🤖</div>
+                <div class="ai-bubble">⚠️ Error connecting to AI. Please check your internet and try again.</div>
+            </div>`;
+    }
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+};
 </script>
 </body>
 </html>
-
-
