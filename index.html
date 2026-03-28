@@ -1909,7 +1909,7 @@ body.dark .ai-bot-msg .ai-bubble { background:#1e2a3a; color:#fff; }
         <div class="tab-item" onclick="switchTab('calls')">Calls</div>
         <div class="tab-item" onclick="switchTab('chats')">Chats</div>
     </div>
-    <div id="statusTab" class="tab-content active">
+    <div class="tabs-wrapper"><div class="tabs-slider" id="tabsSlider"><div id="statusTab" class="tab-content active">
         <div class="my-status-card" onclick="showAddStatus()">
             <div class="status-avatar">
                 <img id="myStatusPhoto" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;" />
@@ -4770,7 +4770,7 @@ function loadRecentChats() {
     if (!recentDiv) return;
     recentDiv.innerHTML = '';
 
-    dbRef('chats').once('value').then(snap => {
+    dbRef('chats').on('value', snap => {
         if (!snap.val()) return;
         const myChats = [];
         snap.forEach(chatSnap => {
