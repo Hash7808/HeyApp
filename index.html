@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="HeyApp">
     <meta name="theme-color" content="#667eea">
-    <link rel="manifest" href="manifest.json">
+    
     <title>HeyApp</title>
     <style>* {
     margin: 0;
@@ -1839,6 +1839,20 @@ body.dark .ai-bot-msg .ai-bubble { background:#1e2a3a; color:#fff; }
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+// Inline Service Worker
+if ('serviceWorker' in navigator) {
+    const swCode = `
+self.addEventListener('install', e => e.waitUntil(caches.open('heyapp-v1').then(c => c.addAll(['/']))));
+self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+`;
+    const blob = new Blob([swCode], {type: 'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+</script>
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22HeyApp%22%2C%22short_name%22%3A%22HeyApp%22%2C%22description%22%3A%22Chat%20with%20anyone%2C%20anywhere%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23667eea%22%2C%22theme_color%22%3A%22%23667eea%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Fcolor%2F192%2Fchat.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Fcolor%2F512%2Fchat.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
 </head>
 <body>
 
@@ -2707,7 +2721,7 @@ window.confirmLogout = async () => {
 // Online Status
 function updateOnlineStatus(isOnline) {
     if (!currentUser) return;
-    dbRef(`users/${currentUser.uid}`).update({ online: isOnline, lastSeen: Date.now() });
+    dbRef('users/' + currentUser.uid).update({ online: isOnline, lastSeen: Date.now() });
 }
 
 setInterval(() => { if (currentUser) updateOnlineStatus(true); }, 30000);
@@ -2723,8 +2737,8 @@ function showMainScreen() {
 window.backToMain = () => {
     if (messagesListener) { try{messagesListener.off();}catch(e){} messagesListener = null; }
     if (currentChatId && currentUser) {
-        dbRef(`typing/${currentChatId}/${currentUser.uid}`).remove();
-        if (currentOtherUser) dbRef(`typing/${currentChatId}/${currentOtherUser.uid}`).off();
+        dbRef('typing/' + currentChatId + '/' + currentUser.uid).remove();
+        if (currentOtherUser) dbRef('typing/' + currentChatId + '/' + currentOtherUser.uid).off();
     }
     if (window.statusInterval) { clearInterval(window.statusInterval); window.statusInterval = null; }
     showMainScreen();
@@ -2857,7 +2871,7 @@ window.openChat = (otherUser) => {
 
 function updateChatStatus() {
     if (!currentOtherUser) return;
-    dbRef(`users/${currentOtherUser.uid}`).once("value").then(snap => {
+    dbRef('users/' + currentOtherUser.uid).once("value").then(snap => {
         const u = snap.val();
         const el = document.getElementById('chatUserStatus');
         if (u?.online) { el.textContent = 'Online'; el.style.color = '#25D366'; }
@@ -2880,7 +2894,7 @@ document.addEventListener('click', (e) => {
 // Delete Chat
 window.deleteChat = async () => {
     if (!confirm('Delete this entire chat?')) return;
-    await dbRef(`chats/${currentChatId}`).remove();
+    await dbRef('chats/' + currentChatId).remove();
     document.getElementById('chatMenu').classList.add('hidden');
     backToMain();
 };
@@ -2921,7 +2935,7 @@ function listenMessages() {
     messagesDiv.innerHTML = '';
     let isFirst = true;
 
-    messagesListener = dbRef(`chats/${currentChatId}/messages`).on("value", (snapshot) => {
+    messagesListener = dbRef('chats/' + currentChatId + '/messages').on("value", (snapshot) => {
         const prevCount = messagesDiv.children.length;
         messagesDiv.innerHTML = '';
         let count = 0;
@@ -2989,7 +3003,7 @@ window.sendMessage = async () => {
     const text = input.value.trim();
     if (!text) return;
 
-    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+    const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
     await msgRef.set({
         text, image: null, senderId: currentUser.uid, senderName: currentUser.name,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -3005,7 +3019,7 @@ window.attachPhoto = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = async (e) => {
-        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
         await msgRef.set({
             text: '', image: e.target.result, senderId: currentUser.uid, senderName: currentUser.name,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -3115,7 +3129,7 @@ window.toggleVoiceRecord = async () => {
                 const blob = new Blob(audioChunks, { type: 'audio/webm' });
                 const reader = new FileReader();
                 reader.onload = async (e) => {
-                    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+                    const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
                     await msgRef.set({
                         text: '', audio: e.target.result, audioDuration: '0:' + Math.floor(audioChunks.length / 10).toString().padStart(2, '0'),
                         senderId: currentUser.uid, senderName: currentUser.name,
@@ -3151,18 +3165,18 @@ let typingTimeout = null;
 window.handleTyping = () => {
     if (!currentChatId || !currentUser) return;
     // Set typing true
-    dbRef(`typing/${currentChatId}/${currentUser.uid}`).set(true);
+    dbRef('typing/' + currentChatId + '/' + currentUser.uid).set(true);
     // Clear after 2 seconds of no typing
     if (typingTimeout) clearTimeout(typingTimeout);
     typingTimeout = setTimeout(() => {
-        dbRef(`typing/${currentChatId}/${currentUser.uid}`).remove();
+        dbRef('typing/' + currentChatId + '/' + currentUser.uid).remove();
     }, 2000);
 };
 
 // Listen for other user typing
 function listenTyping() {
     if (!currentChatId || !currentOtherUser) return;
-    dbRef(`typing/${currentChatId}/${currentOtherUser.uid}`).on('value', snap => {
+    dbRef('typing/' + currentChatId + '/' + currentOtherUser.uid).on('value', snap => {
         const indicator = document.getElementById('typingIndicator');
         if (!indicator) return;
         if (snap.val()) {
@@ -3314,7 +3328,7 @@ async function startCall(type) {
         });
 
         // Log call
-        dbRef(`calls/${currentUser.uid}`).push().set({
+        dbRef('calls/' + currentUser.uid).push().set({
             type, with: currentOtherUser.name, withUid: currentOtherUser.uid,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
             timestamp: Date.now(), status: 'outgoing'
@@ -3479,7 +3493,7 @@ window.showMainScreen = function() {
 function loadCallHistory() {
     const callsDiv = document.getElementById('callsList');
     callsDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">Loading...</p>';
-    dbRef(`calls/${currentUser.uid}`).once("value").then(snap => {
+    dbRef('calls/' + currentUser.uid).once("value").then(snap => {
         callsDiv.innerHTML = '';
         if (!snap.exists()) {
             callsDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No calls yet</p>';
@@ -3522,7 +3536,7 @@ window.previewStatusPhoto = () => {
 window.postStatus = async () => {
     const text = document.getElementById('statusText').value.trim();
     if (!text && !statusPhotoData) return alert('Add text or photo!');
-    const statusRef = dbRef(`statuses/${currentUser.uid}`).push();
+    const statusRef = dbRef('statuses/' + currentUser.uid).push();
     await statusRef.set({
         uid: currentUser.uid, name: currentUser.name, photo: currentUser.photo || '',
         text, image: statusPhotoData || null, timestamp: Date.now(),
@@ -3626,7 +3640,7 @@ window.saveProfile = async () => {
     const username = document.getElementById('usernameInput').value.trim();
     const bio = document.getElementById('bioInput').value.trim();
     const phone = document.getElementById('phoneInput').value.trim();
-    await dbRef(`users/${currentUser.uid}`).update({ username, bio, phone });
+    await dbRef('users/' + currentUser.uid).update({ username, bio, phone });
     currentUser.username = username;
     currentUser.bio = bio;
     currentUser.phone = phone;
@@ -3642,7 +3656,7 @@ window.uploadPhoto = () => {
     const reader = new FileReader();
     reader.onload = async (e) => {
         const photoData = e.target.result;
-        await dbRef(`users/${currentUser.uid}`).update({ photo: photoData });
+        await dbRef('users/' + currentUser.uid).update({ photo: photoData });
         currentUser.photo = photoData;
         document.getElementById('profileImage').src = photoData;
         document.getElementById('profileImage').style.display = 'block';
@@ -3839,7 +3853,7 @@ window.deleteAccount = async () => {
     if (!confirm('Are you sure? This will permanently delete your account!')) return;
     if (!confirm('This cannot be undone. Delete account?')) return;
     try {
-        await dbRef(`users/${currentUser.uid}`).remove();
+        await dbRef('users/' + currentUser.uid).remove();
         await auth.currentUser.delete();
         alert('Account deleted.');
     } catch (e) { alert('Error: ' + e.message); }
@@ -4015,7 +4029,7 @@ window.attachFile = (type) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
         const isImage = type === 'photo';
-        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
         await msgRef.set({
             text: isImage ? '' : `📎 ${file.name}`,
             image: isImage ? e.target.result : null,
@@ -4033,7 +4047,7 @@ window.shareLocation = () => {
     if (!navigator.geolocation) return alert('Geolocation not supported');
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude, longitude } = pos.coords;
-        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
         await msgRef.set({
             text: `📍 Location: https://maps.google.com/?q=${latitude},${longitude}`,
             image: null, senderId: currentUser.uid, senderName: currentUser.name,
@@ -4048,7 +4062,7 @@ window.shareContact = () => {
     const name = prompt('Contact name:');
     const phone = prompt('Contact phone:');
     if (!name || !phone) return;
-    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+    const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
     msgRef.set({
         text: `👤 Contact: ${name} - ${phone}`,
         image: null, senderId: currentUser.uid, senderName: currentUser.name,
@@ -4115,7 +4129,7 @@ window.showMediaGallery = () => {
     showScreen('mediaGalleryScreen');
     const grid = document.getElementById('mediaGalleryGrid');
     grid.innerHTML = '<p style="padding:20px;text-align:center;color:#999;grid-column:1/-1;">Loading...</p>';
-    dbRef(`chats/${currentChatId}/messages`).once("value").then(snap => {
+    dbRef('chats/' + currentChatId + '/messages').once("value").then(snap => {
         grid.innerHTML = '';
         let count = 0;
         snap.forEach(child => {
@@ -4213,7 +4227,7 @@ window.showExportChat = () => {
 };
 
 window.exportChatTxt = () => {
-    dbRef(`chats/${currentChatId}/messages`).once("value").then(snap => {
+    dbRef('chats/' + currentChatId + '/messages').once("value").then(snap => {
         let text = `HeyApp Chat Export - ${currentOtherUser.name}\n${'='.repeat(40)}\n\n`;
         snap.forEach(child => {
             const msg = child.val();
@@ -4231,7 +4245,7 @@ window.exportChatTxt = () => {
 };
 
 window.exportChatJSON = () => {
-    dbRef(`chats/${currentChatId}/messages`).once("value").then(snap => {
+    dbRef('chats/' + currentChatId + '/messages').once("value").then(snap => {
         const messages = [];
         snap.forEach(child => messages.push(child.val()));
         const blob = new Blob([JSON.stringify(messages, null, 2)], { type: 'application/json' });
@@ -4281,7 +4295,7 @@ window.scheduleMessage = () => {
     closeScheduleModal();
     alert(`Message scheduled! Will send in ${Math.round(delay / 60000)} minutes.`);
     setTimeout(async () => {
-        const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+        const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
         await msgRef.set({
             text: `⏰ ${text}`, image: null, senderId: currentUser.uid, senderName: currentUser.name,
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -4306,7 +4320,7 @@ window.sendPoll = async () => {
     if (document.getElementById('pollOpt4').value.trim()) options.push(document.getElementById('pollOpt4').value.trim());
 
     const pollText = `📊 *${question}*\n${options.map((o, i) => `${['1️⃣','2️⃣','3️⃣','4️⃣'][i]} ${o}`).join('\n')}\n\nReply with option number to vote!`;
-    const msgRef = dbRef(`chats/${currentChatId}/messages`).push();
+    const msgRef = dbRef('chats/' + currentChatId + '/messages').push();
     await msgRef.set({
         text: pollText, image: null, senderId: currentUser.uid, senderName: currentUser.name,
         time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -4470,7 +4484,7 @@ window.setBirthdayStatus = () => {
     const today = new Date();
     const month = today.getMonth() + 1;
     const day = today.getDate();
-    dbRef(`users/${currentUser.uid}`).update({ birthday: `${month}/${day}` });
+    dbRef('users/' + currentUser.uid).update({ birthday: `${month}/${day}` });
     alert('Birthday set!');
 };
 
