@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App - Simple Version</title>
+    <title>HeyApp</title>
     <style>
 * {
     margin: 0;
@@ -995,7 +995,7 @@ button:active {
         <!-- Login Screen -->
         <div id="loginScreen" class="screen">
             <div class="container">
-                <h1>ðŸ’¬ Chat App</h1>
+                <h1>💬 HeyApp</h1>
                 <input type="email" id="loginEmail" placeholder="Email" />
                 <input type="password" id="loginPassword" placeholder="Password" />
                 <button onclick="login()">Login</button>
@@ -1020,13 +1020,13 @@ button:active {
             <div class="header">
                 <h2>Chats</h2>
                 <div class="header-right">
-                    <button class="profile-btn" onclick="showStatusScreen()">ðŸ“·</button>
-                    <button class="profile-btn" onclick="showProfile()">ðŸ‘¤</button>
+                    <button class="profile-btn" onclick="showStatusScreen()">📷</button>
+                    <button class="profile-btn" onclick="showProfile()">👤</button>
                     <button class="logout-btn" onclick="logout()">Logout</button>
                 </div>
             </div>
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="ðŸ” Search users..." oninput="searchUsers()" />
+                <input type="text" id="searchInput" placeholder="🔍 Search users..." oninput="searchUsers()" />
             </div>
             <div id="chatList"></div>
         </div>
@@ -1034,14 +1034,14 @@ button:active {
         <!-- Profile Screen -->
         <div id="profileScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="backToChats()">â†</button>
+                <button class="back-btn" onclick="backToChats()">←</button>
                 <h2>Profile</h2>
                 <div></div>
             </div>
             <div class="profile-container">
                 <div class="profile-avatar" id="profileAvatar">
                     <img id="profileImage" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-                    <span id="profileIcon">ðŸ‘¤</span>
+                    <span id="profileIcon">👤</span>
                 </div>
                 <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="uploadPhoto()" />
                 <button onclick="document.getElementById('photoInput').click()" style="margin-top: 20px; padding: 10px 20px; width: auto;">Change Photo</button>
@@ -1054,18 +1054,18 @@ button:active {
         <!-- Chat Screen -->
         <div id="chatScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="backToChats()">â†</button>
+                <button class="back-btn" onclick="backToChats()">←</button>
                 <div class="chat-header-user" onclick="showOtherUserProfile()" style="cursor: pointer;">
                     <img id="chatHeaderPhoto" class="header-avatar" style="display: none;" />
-                    <span id="chatHeaderIcon" class="header-avatar">ðŸ‘¤</span>
+                    <span id="chatHeaderIcon" class="header-avatar">👤</span>
                     <div class="chat-header-user-info">
                         <h2 id="chatUserName"></h2>
                         <span id="chatUserStatus" class="chat-user-status">Online</span>
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="call-btn" onclick="startVideoCall()">ðŸ“¹</button>
-                    <button class="call-btn" onclick="startAudioCall()">ðŸ“ž</button>
+                    <button class="call-btn" onclick="startVideoCall()">📹</button>
+                    <button class="call-btn" onclick="startAudioCall()">📞</button>
                 </div>
             </div>
             <div id="messages"></div>
@@ -1074,12 +1074,12 @@ button:active {
                     <div class="reply-preview-label">Replying to</div>
                     <div id="replyText" class="reply-preview-text"></div>
                 </div>
-                <button class="cancel-reply-btn" onclick="cancelReply()">âœ•</button>
+                <button class="cancel-reply-btn" onclick="cancelReply()">✕</button>
             </div>
             <div class="input-container">
-                <button class="attach-btn" onclick="document.getElementById('photoAttach').click()">ðŸ“Ž</button>
+                <button class="attach-btn" onclick="document.getElementById('photoAttach').click()">📎</button>
                 <input type="file" id="photoAttach" accept="image/*" style="display: none;" onchange="attachPhoto()" />
-                <button class="emoji-btn" onclick="toggleEmojiPicker()">ðŸ˜Š</button>
+                <button class="emoji-btn" onclick="toggleEmojiPicker()">😊</button>
                 <input type="text" id="messageInput" placeholder="Type a message..." oninput="handleTyping()" />
                 <button onclick="sendMessage()">Send</button>
             </div>
@@ -1093,7 +1093,7 @@ button:active {
             <div class="call-container">
                 <div class="call-avatar" id="callAvatarContainer">
                     <img id="callUserPhoto" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-                    <span id="callUserIcon">ðŸ‘¤</span>
+                    <span id="callUserIcon">👤</span>
                 </div>
                 <h2 id="callingUserName"></h2>
                 <p id="callStatus">Calling...</p>
@@ -1324,10 +1324,10 @@ function displayMessages() {
             contentHtml = `<div class="message-text"><i>This message was deleted</i></div>`;
         }
         
-        const deleteBtn = isMine && !msg.deleted ? `<button class="msg-delete-btn" onclick="deleteMessage('${msg.id}')">ðŸ—‘ï¸</button>` : '';
-        const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}', '${(msg.text || 'Photo').replace(/'/g, "\\'")}')">â†©ï¸</button>` : '';
+        const deleteBtn = isMine && !msg.deleted ? `<button class="msg-delete-btn" onclick="deleteMessage('${msg.id}')">🗑️</button>` : '';
+        const replyBtn = !msg.deleted ? `<button class="msg-reply-btn" onclick="replyToMessage('${msg.id}', '${(msg.text || 'Photo').replace(/'/g, "\\'")}')">↩️</button>` : '';
         
-        const readReceipt = isMine ? (msg.read ? 'âœ“âœ“' : 'âœ“') : '';
+        const readReceipt = isMine ? (msg.read ? '✓✓' : '✓') : '';
         
         messageDiv.innerHTML = `
             ${replyHtml}
@@ -1429,21 +1429,21 @@ window.endCall = () => {
 
 // Emoji Picker
 const emojis = [
-    'ðŸ˜€', 'ðŸ˜ƒ', 'ðŸ˜„', 'ðŸ˜', 'ðŸ˜†', 'ðŸ˜…', 'ðŸ¤£', 'ðŸ˜‚', 'ðŸ™‚', 'ðŸ™ƒ',
-    'ðŸ˜‰', 'ðŸ˜Š', 'ðŸ˜‡', 'ðŸ¥°', 'ðŸ˜', 'ðŸ¤©', 'ðŸ˜˜', 'ðŸ˜—', 'ðŸ˜š', 'ðŸ˜™',
-    'ðŸ˜‹', 'ðŸ˜›', 'ðŸ˜œ', 'ðŸ¤ª', 'ðŸ˜', 'ðŸ¤‘', 'ðŸ¤—', 'ðŸ¤­', 'ðŸ¤«', 'ðŸ¤”',
-    'ðŸ¤', 'ðŸ¤¨', 'ðŸ˜', 'ðŸ˜‘', 'ðŸ˜¶', 'ðŸ˜', 'ðŸ˜’', 'ðŸ™„', 'ðŸ˜¬', 'ðŸ¤¥',
-    'ðŸ˜Œ', 'ðŸ˜”', 'ðŸ˜ª', 'ðŸ¤¤', 'ðŸ˜´', 'ðŸ˜·', 'ðŸ¤’', 'ðŸ¤•', 'ðŸ¤¢', 'ðŸ¤®',
-    'ðŸ¤§', 'ðŸ¥µ', 'ðŸ¥¶', 'ðŸ˜¶â€ðŸŒ«ï¸', 'ðŸ¥´', 'ðŸ˜µ', 'ðŸ¤¯', 'ðŸ¤ ', 'ðŸ¥³', 'ðŸ˜Ž',
-    'ðŸ¤“', 'ðŸ§', 'ðŸ˜•', 'ðŸ˜Ÿ', 'ðŸ™', 'â˜¹ï¸', 'ðŸ˜®', 'ðŸ˜¯', 'ðŸ˜²', 'ðŸ˜³',
-    'ðŸ¥º', 'ðŸ˜¦', 'ðŸ˜§', 'ðŸ˜¨', 'ðŸ˜°', 'ðŸ˜¥', 'ðŸ˜¢', 'ðŸ˜­', 'ðŸ˜±', 'ðŸ˜–',
-    'ðŸ˜£', 'ðŸ˜ž', 'ðŸ˜“', 'ðŸ˜©', 'ðŸ˜«', 'ðŸ¥±', 'ðŸ˜¤', 'ðŸ˜¡', 'ðŸ˜ ', 'ðŸ¤¬',
-    'ðŸ‘', 'ðŸ‘Ž', 'ðŸ‘Œ', 'âœŒï¸', 'ðŸ¤ž', 'ðŸ¤Ÿ', 'ðŸ¤˜', 'ðŸ¤™', 'ðŸ‘ˆ', 'ðŸ‘‰',
-    'ðŸ‘†', 'ðŸ‘‡', 'â˜ï¸', 'ðŸ‘', 'ðŸ™Œ', 'ðŸ‘', 'ðŸ¤²', 'ðŸ¤', 'ðŸ™', 'âœï¸',
-    'ðŸ’ª', 'ðŸ¦¾', 'ðŸ¦¿', 'ðŸ¦µ', 'ðŸ¦¶', 'ðŸ‘‚', 'ðŸ¦»', 'ðŸ‘ƒ', 'ðŸ§ ', 'ðŸ¦·',
-    'â¤ï¸', 'ðŸ§¡', 'ðŸ’›', 'ðŸ’š', 'ðŸ’™', 'ðŸ’œ', 'ðŸ–¤', 'ðŸ¤', 'ðŸ¤Ž', 'ðŸ’”',
-    'â£ï¸', 'ðŸ’•', 'ðŸ’ž', 'ðŸ’“', 'ðŸ’—', 'ðŸ’–', 'ðŸ’˜', 'ðŸ’', 'ðŸ’Ÿ', 'â˜®ï¸',
-    'âœ¨', 'â­', 'ðŸŒŸ', 'ðŸ’«', 'ðŸ”¥', 'ðŸ’¥', 'ðŸ’¯', 'âœ…', 'âŒ', 'âš ï¸'
+    '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃',
+    '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙',
+    '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔',
+    '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥',
+    '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮',
+    '🤧', '🥵', '🥶', '😶‍🌫️', '🥴', '😵', '🤯', '🤠', '🥳', '😎',
+    '🤓', '🧐', '😕', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳',
+    '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖',
+    '😣', '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬',
+    '👍', '👎', '👌', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉',
+    '👆', '👇', '☝️', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✍️',
+    '💪', '🦾', '🦿', '🦵', '🦶', '👂', '🦻', '👃', '🧠', '🦷',
+    '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔',
+    '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '💟', '☮️',
+    '✨', '⭐', '🌟', '💫', '🔥', '💥', '💯', '✅', '❌', '⚠️'
 ];
 
 window.toggleEmojiPicker = () => {
@@ -1511,7 +1511,7 @@ window.searchUsers = () => {
                 
                 const photoHtml = user.photo 
                     ? `<img src="${user.photo}" class="chat-avatar" />` 
-                    : `<div class="chat-avatar">ðŸ‘¤</div>`;
+                    : `<div class="chat-avatar">👤</div>`;
                 
                 const onlineStatus = getOnlineStatus(user.id);
                 const statusColor = onlineStatus === 'Online' ? 'color: #25D366;' : 'color: #999;';
@@ -1781,7 +1781,7 @@ function createStatusItem(user, userStatuses, isMine) {
     
     const photoHtml = user.photo 
         ? `<img src="${user.photo}" class="status-avatar" />` 
-        : `<div class="status-avatar">ðŸ‘¤</div>`;
+        : `<div class="status-avatar">👤</div>`;
     
     statusDiv.innerHTML = `
         ${photoHtml}
@@ -1975,7 +1975,7 @@ function getTimeAgo(timestamp) {
             <div class="video-call-container">
                 <div class="video-call-avatar" id="videoCallAvatarContainer">
                     <img id="videoCallUserPhoto" style="display: none; width: 100%; height: 100%; border-radius: 20px; object-fit: cover;" />
-                    <span id="videoCallUserIcon">ðŸ‘¤</span>
+                    <span id="videoCallUserIcon">👤</span>
                 </div>
                 <div class="video-call-info">
                     <h2 id="videoCallingUserName"></h2>
@@ -1990,7 +1990,7 @@ function getTimeAgo(timestamp) {
 
         <!-- Image Preview Modal -->
         <div id="imageModal" class="image-modal hidden" onclick="closeImageModal()">
-            <button class="close-modal-btn" onclick="closeImageModal()">âœ•</button>
+            <button class="close-modal-btn" onclick="closeImageModal()">✕</button>
             <img id="modalImage" src="" alt="Preview" />
         </div>
 
@@ -1998,14 +1998,14 @@ function getTimeAgo(timestamp) {
         <!-- Other User Profile Screen -->
         <div id="otherUserProfileScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="backToChatFromProfile()">â†</button>
+                <button class="back-btn" onclick="backToChatFromProfile()">←</button>
                 <h2>Profile</h2>
                 <div></div>
             </div>
             <div class="profile-container">
                 <div class="profile-avatar" id="otherProfileAvatar">
                     <img id="otherProfileImage" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-                    <span id="otherProfileIcon">ðŸ‘¤</span>
+                    <span id="otherProfileIcon">👤</span>
                 </div>
                 <h2 id="otherProfileName" style="margin-top: 20px;"></h2>
                 <p id="otherProfileEmail"></p>
@@ -2018,13 +2018,13 @@ function getTimeAgo(timestamp) {
         <!-- Status Screen -->
         <div id="statusScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="backToChats()">â†</button>
+                <button class="back-btn" onclick="backToChats()">←</button>
                 <h2>Status</h2>
                 <div></div>
             </div>
             <div class="status-upload-section">
-                <button onclick="uploadTextStatus()" style="margin: 10px;">ðŸ“ Text Status</button>
-                <button onclick="document.getElementById('statusImageInput').click()" style="margin: 10px;">ðŸ“· Photo Status</button>
+                <button onclick="uploadTextStatus()" style="margin: 10px;">📝 Text Status</button>
+                <button onclick="document.getElementById('statusImageInput').click()" style="margin: 10px;">📷 Photo Status</button>
                 <input type="file" id="statusImageInput" accept="image/*" style="display: none;" onchange="uploadImageStatus()" />
             </div>
             <div id="statusList"></div>
@@ -2034,18 +2034,18 @@ function getTimeAgo(timestamp) {
         <div id="statusViewScreen" class="screen hidden">
             <div class="status-view-container">
                 <div class="status-view-header">
-                    <button class="back-btn" onclick="backToStatusList()">â†</button>
+                    <button class="back-btn" onclick="backToStatusList()">←</button>
                     <div class="status-view-user">
                         <h3 id="statusUserName"></h3>
                         <p id="statusTime"></p>
                     </div>
-                    <button id="deleteStatusBtn" class="delete-status-btn" style="display: none;">ðŸ—‘ï¸</button>
+                    <button id="deleteStatusBtn" class="delete-status-btn" style="display: none;">🗑️</button>
                 </div>
                 <div id="statusProgress" class="status-progress"></div>
                 <div id="statusContent" class="status-content-view"></div>
                 <div class="status-nav-buttons">
-                    <button class="status-nav-btn" onclick="previousStatus()">â†</button>
-                    <button class="status-nav-btn" onclick="nextStatus()">â†’</button>
+                    <button class="status-nav-btn" onclick="previousStatus()">←</button>
+                    <button class="status-nav-btn" onclick="nextStatus()">→</button>
                 </div>
             </div>
         </div>
@@ -2062,11 +2062,10 @@ function getTimeAgo(timestamp) {
                     <div id="statusViewerName" class="status-viewer-name"></div>
                     <div id="statusViewerTime" class="status-viewer-time"></div>
                 </div>
-                <button class="close-modal-btn" onclick="closeStatusViewer()">âœ•</button>
+                <button class="close-modal-btn" onclick="closeStatusViewer()">✕</button>
             </div>
             <div class="status-viewer-content" onclick="closeStatusViewer()">
                 <img id="statusViewerImage" class="status-viewer-image" style="display: none;" />
                 <div id="statusViewerText" class="status-viewer-text"></div>
             </div>
         </div>
-
